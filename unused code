@@ -1,0 +1,72 @@
+	   	this.load.image('bg1', 'assets/parallax/bg1.png');
+	    this.load.image('bg2', 'assets/parallax/bg2.png');
+	    this.load.image('bg3', 'assets/parallax/bg3.png');
+	    this.load.image('bg4', 'assets/parallax/bg4.png');
+	    this.load.image('bg5', 'assets/parallax/bg5.png');
+	    this.load.image('bg6', 'assets/parallax/bg6.png');
+	    this.load.image('bg7', 'assets/parallax/bg7.png');
+	    this.load.image('bg8', 'assets/parallax/bg8.png');
+	    this.load.image('bg9', 'assets/parallax/bg9.png');
+	    this.load.image('bg10', 'assets/parallax/bg10.png');
+	    this.load.image('bg11', 'assets/parallax/bg11.png');
+	    
+	    var text1 = this.add.text(1575, 265, "SHIELDS", {font: "25px courier", fill: "white"}).setInteractive();
+	text1.on('pointerdown', function (pointer) {
+
+        this.setTint(0xff0000);
+	
+	 player.setVelocityY(-330);
+	
+    });
+
+    text1.on('pointerout', function (pointer) {
+
+        this.clearTint();
+
+    });
+
+    text1.on('pointerup', function (pointer) {
+
+        this.clearTint();
+
+    });
+	    
+	//this.bg1.tilePositionY = this.myCam.scrollY * .1;
+	//this.bg2.tilePositionY = this.myCam.scrollY * .2;
+	//this.bg3.tilePositionY = this.myCam.scrollY * .3;
+	//this.bg4.tilePositionY = this.myCam.scrollY * .4;
+	//this.bg5.tilePositionY = this.myCam.scrollY * .5;
+	//this.bg6.tilePositionY = this.myCam.scrollY * .6;
+	this.bg1 = this.add.tileSprite(0, -300, game.config.width, game.config.height, "bg1");
+	this.bg1.setOrigin(0, 0);
+	this.bg1.setScrollFactor(0);
+	this.bg2 = this.add.tileSprite(0, -300, game.config.width, game.config.height, "bg2");
+	this.bg2.setOrigin(0, 0);
+	this.bg2.setScrollFactor(0, 0);
+	this.bg3 = this.add.tileSprite(0, -300, game.config.width, game.config.height, "bg3");
+	this.bg3.setOrigin(0, 0);
+	this.bg3.setScrollFactor(0);    
+	this.bg4 = this.add.tileSprite(0, -300, game.config.width, game.config.height, "bg4");
+	this.bg4.setOrigin(0, 0);
+	this.bg4.setScrollFactor(0);
+	this.bg5 = this.add.tileSprite(0, -300, game.config.width, game.config.height, "bg5");
+	this.bg5.setOrigin(0, 0);
+	this.bg5.setScrollFactor(0);
+	this.bg6 = this.add.tileSprite(0, -300, game.config.width, game.config.height, "bg6");
+	this.bg6.setOrigin(0, 0);
+	this.bg6.setScrollFactor(0);
+	this.bg7 = this.add.tileSprite(0, -300, game.config.width, game.config.height, "bg7");
+	this.bg7.setOrigin(0, 0);
+	this.bg7.setScrollFactor(0);
+	this.bg8 = this.add.tileSprite(0, -300, game.config.width, game.config.height, "bg8");
+	this.bg8.setOrigin(0, 0);
+	this.bg8.setScrollFactor(0);
+	this.bg9 = this.add.tileSprite(0, -300, game.config.width, game.config.height, "bg9");
+	this.bg9.setOrigin(0, 0);
+	this.bg9.setScrollFactor(0);
+	this.bg10 = this.add.tileSprite(0, -300, game.config.width, game.config.height, "bg10");
+	this.bg10.setOrigin(0, 0);
+	this.bg10.setScrollFactor(0);
+	this.bg11 = this.add.tileSprite(0, -300, game.config.width, game.config.height, "bg11");
+	this.bg11.setOrigin(0, 0);
+	this.bg11.setScrollFactor(0);
