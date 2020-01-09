@@ -11,7 +11,7 @@ game_state.main.prototype = {
         game.load.image("sky", "assets/sky.png");
         game.load.image("ground", "assets/platform.png");
         game.load.image("star", "assets/star.png");
-        game.load.spritesheet("dude", "assets/dude.png", 32, 48);
+        game.load.spritesheet("knight", "assets/kca.png", 64, 64);
     },
 
     create: function() {
@@ -60,8 +60,9 @@ game_state.main.prototype = {
         this.player.body.gravity.y = 300;
         this.player.body.collideWorldBounds = true;
         //animations
-        this.player.animations.add("left", [0, 1, 2, 3], 10, true);
-        this.player.animations.add("right", [5, 6, 7, 8], 10, true);
+        this.player.animations.add("left", [20, 21, 22, 23, 24, 25, 26, 27], 10, true);
+        this.player.animations.add("right", [6, 7, 8, 9, 10, 11, 12, 13], 10, true);
+        this.playerDir = "left";
         //controls
         this.cursors = game.input.keyboard.createCursorKeys();
     },
@@ -82,26 +83,37 @@ game_state.main.prototype = {
             //left
             this.player.body.velocity.x = -150;
             this.player.animations.play("left");
+            this.playerDir = "left";
         }
         else if (this.cursors.right.isDown) {
             //right
             this.player.body.velocity.x = 150;
             this.player.animations.play("right");
+            this.playerDir = "right";
         }
         else {
             //stop
             this.player.animations.stop();
-            this.player.frame = 4;
+            if (this.playerDir == "left") {
+                this.player.frame = 16;
+            }
+            else if (this.playerDir == "right") {
+                this.player.frame = 1;
+            }
         }
         
         //jump if on ground and jump key held
         if (this.cursors.up.isDown && this.player.body.touching.down) {
             this.player.body.velocity.y = -350;
         }
+        
+        //update score
+        this.scoreText.text = "Score: " + this.score;
     },
     collectStar: function(player, star) {
         star.kill();
         this.score += 1;
+        console.log(this.score);
     }
 };
 game.state.add('main', game_state.main);
