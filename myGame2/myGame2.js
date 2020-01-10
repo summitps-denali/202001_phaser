@@ -11,8 +11,8 @@ game_state.main.prototype = {
         game.load.image("ground", "assets/platform.png");
         game.load.image("star", "assets/star.png");
         game.load.spritesheet("knight", "assets/kca.png", 256, 256);
-        //game.load.spritesheet("backgrounds", "assets/backgrounds", 128, 128);
-        game.load.image("sky", "assets/Useless trash/sky.png");
+        game.load.image("B", "assets/backgroundB.png");
+        game.load.image("F", "assets/backgroundF.png");
     },
 
     create: function() {
@@ -20,14 +20,16 @@ game_state.main.prototype = {
         game.physics.startSystem(Phaser.Physics.ARCADE);
         
         //setup backgrounds
-        /*
-        this.deepBackground = game.add.sprite(0, 0, "backgrounds");
-        this.midBackground1 = game.add.sprite(0, 0, "backgrounds");
-        this.midBackground2 = game.add.sprite(0, 0, "backgrounds");
-        this.frontBackground1 = game.add.sprite(0, 0, "backgrounds");
-        this.frontBackground2 = game.add.sprite(0, 0, "backgrounds");
-        */
-        this.background = game.add.sprite(0, 0, "sky");
+        this.backWidth = 995;
+        this.backWidth = this.world.width;
+        this.midBackground1 = game.add.sprite(0, 0, "B");
+        this.midBackground2 = game.add.sprite(game.world.width, 0, "B");
+        this.frontBackground1 = game.add.sprite(0, 0, "F");
+        this.frontBackground2 = game.add.sprite(game.world.width, 0, "F");
+        this.midBackground1.scale.setTo(6.3, 5);
+        this.midBackground2.scale.setTo(6.3, 5);
+        this.frontBackground1.scale.setTo(6.3, 5);
+        this.frontBackground2.scale.setTo(6.3, 5);
         
         //platform group
         this.platforms = game.add.group();
@@ -63,7 +65,7 @@ game_state.main.prototype = {
         });
         
         //setup player
-        this.player = game.add.sprite(32, game.world.height - 150, "knight");
+        this.player = game.add.sprite(game.world.width / 2, game.world.height - 150, "knight");
         game.physics.arcade.enable(this.player);
         //player physics properties
         this.player.body.bounce.y = 0;
@@ -90,18 +92,6 @@ game_state.main.prototype = {
         
         //player-star collection
         game.physics.arcade.collide(this.player, this.stars, this.collectStar, null, this);
-        
-        //camera scroll
-        this.cameraMovement = this.player.body.x - (game.world.width / 2);
-        //player
-        this.player.body.x -= this.cameraMovement;
-        //stars
-        for(var i=0;i<this.starList.length;i++) {
-            this.starList[i].body.x -= this.cameraMovement;
-        }
-        //platforms
-        this.ground.body.x -= this.cameraMovement;
-        this.ledge.body.x -= this.cameraMovement;
         
         //reset player x velocity
         this.player.body.velocity.x = 0;
@@ -177,6 +167,48 @@ game_state.main.prototype = {
         
         //update score
         this.scoreText.text = "Score: " + this.score;
+        
+        
+        
+        //camera scroll
+        this.cameraMovement = this.player.body.x - (game.world.width / 2);
+        //player
+        this.player.body.x -= this.cameraMovement;
+        //stars
+        for(var i=0;i<this.starList.length;i++) {
+            this.starList[i].body.x -= this.cameraMovement;
+        }
+        //platforms
+        this.ground.body.x -= this.cameraMovement;
+        this.ledge.body.x -= this.cameraMovement;
+        this.midBackground1.x -= this.cameraMovement / 4;
+        this.midBackground2.x -= this.cameraMovement / 4;
+        this.frontBackground1.x -= this.cameraMovement / 2;
+        this.frontBackground2.x -= this.cameraMovement / 2;
+        if (this.midBackground1.x > game.world.width) {
+            this.midBackground1.x = -game.world.width;
+        }
+        if (this.midBackground1.x < -game.world.width) {
+            this.midBackground1.x = game.world.width;
+        }
+        if (this.midBackground2.x > game.world.width) {
+            this.midBackground2.x = -game.world.width;
+        }
+        if (this.midBackground2.x < -game.world.width) {
+            this.midBackground2.x = game.world.width;
+        }
+        if (this.frontBackground1.x > game.world.width) {
+            this.frontBackground1.x = -game.world.width;
+        }
+        if (this.frontBackground1.x < -game.world.width) {
+            this.frontBackground1.x = game.world.width;
+        }
+        if (this.frontBackground2.x > game.world.width) {
+            this.frontBackground2.x = -game.world.width;
+        }
+        if (this.frontBackground2.x < -game.world.width) {
+            this.frontBackground2.x = game.world.width;
+        }
     },
     collectStar: function(player, star) {
         star.kill();
