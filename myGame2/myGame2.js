@@ -35,22 +35,24 @@ game_state.main.prototype = {
         this.platforms.enableBody = true;
         
         //setup ground
-        var ground = this.platforms.create(0, game.world.height - 64, "ground");
-        ground.scale.setTo(2, 2);
-        ground.body.immovable = true;
+        this.ground = this.platforms.create(0, game.world.height - 64, "ground");
+        this.ground.scale.setTo(2, 2);
+        this.ground.body.immovable = true;
         
         //add platforms
-        var ledge = this.platforms.create(100, 400, "ground");
-        ledge.body.immovable = true;
+        this.ledge = this.platforms.create(100, 400, "ground");
+        this.ledge.body.immovable = true;
         
         //star group
         this.stars = game.add.group();
         this.stars.enableBody = true;
+        this.starList = [];
         //create stars
         for (var i = 0;i<12;i++){
             var star = this.stars.create(i * 70, 0, "star");
             star.body.gravity.y = 300;
             star.body.bounce.y = 0.7 * Math.random() * 0.2;
+            this.starList.push(star);
         }
         
         //point display
@@ -90,7 +92,16 @@ game_state.main.prototype = {
         game.physics.arcade.collide(this.player, this.stars, this.collectStar, null, this);
         
         //camera scroll
-        //this.cameraMovement = this.player.body.
+        this.cameraMovement = this.player.body.x - (game.world.width / 2);
+        //player
+        this.player.body.x -= this.cameraMovement;
+        //stars
+        for(var i=0;i<this.starList.length;i++) {
+            this.starList[i].body.x -= this.cameraMovement;
+        }
+        //platforms
+        this.ground.body.x -= this.cameraMovement;
+        this.ledge.body.x -= this.cameraMovement;
         
         //reset player x velocity
         this.player.body.velocity.x = 0;
