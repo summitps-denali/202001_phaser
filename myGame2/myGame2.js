@@ -172,6 +172,17 @@ game_state.main.prototype = {
         
         //camera scroll
         this.cameraMovement = this.player.body.x - (game.world.width / 2);
+        if (Math.abs(this.cameraMovement) > 150) {
+            if (this.cameraMovement > 0) {
+                this.cameraMovement = 10;
+            }
+            else {
+                this.cameraMovement = -10;
+            }
+        }
+        if (this.cursors.down.isDown) {//disable scrolling
+            this.cameraMovement = 0;
+        }
         //player
         this.player.body.x -= this.cameraMovement;
         //stars
@@ -181,10 +192,13 @@ game_state.main.prototype = {
         //platforms
         this.ground.body.x -= this.cameraMovement;
         this.ledge.body.x -= this.cameraMovement;
+        //backgrounds
         this.midBackground1.x -= this.cameraMovement / 4;
         this.midBackground2.x -= this.cameraMovement / 4;
         this.frontBackground1.x -= this.cameraMovement / 2;
         this.frontBackground2.x -= this.cameraMovement / 2;
+        
+        //wrap backgrounds
         if (this.midBackground1.x > game.world.width) {
             this.midBackground1.x = -game.world.width;
         }
