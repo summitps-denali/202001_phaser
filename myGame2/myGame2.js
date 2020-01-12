@@ -9,10 +9,11 @@ game_state.main.prototype = {
     preload: function() {
         //load images
         game.load.image("ground", "assets/platform.png");
-        game.load.image("star", "assets/star.png");
+        game.load.image("star", "assets/gold.png");
         game.load.spritesheet("knight", "assets/kca.png", 256, 256);
         game.load.image("B", "assets/backgroundB.png");
         game.load.image("F", "assets/backgroundF.png");
+        game.load.image("lava", "assets/lava.png");
     },
 
     create: function() {
@@ -20,8 +21,6 @@ game_state.main.prototype = {
         game.physics.startSystem(Phaser.Physics.ARCADE);
         
         //setup backgrounds
-        this.backWidth = 995;
-        this.backWidth = this.world.width;
         this.midBackground1 = game.add.sprite(0, 0, "B");
         this.midBackground2 = game.add.sprite(game.world.width, 0, "B");
         this.frontBackground1 = game.add.sprite(0, 0, "F");
@@ -31,19 +30,24 @@ game_state.main.prototype = {
         this.frontBackground1.scale.setTo(6.3, 5);
         this.frontBackground2.scale.setTo(6.3, 5);
         
+        //setup lava
+        this.lava1 = game.add.sprite(0, game.world.height - 64, "lava");
+        this.lava1.scale.setTo(7, 3);
+        this.lava2 = game.add.sprite(game.world.width, game.world.height - 64, "lava");
+        this.lava2.scale.setTo(7, 3);
+        
         //platform group
         this.platforms = game.add.group();
         //enabel physics for platform group
         this.platforms.enableBody = true;
         
-        //setup ground
-        this.ground = this.platforms.create(0, game.world.height - 64, "ground");
-        this.ground.scale.setTo(2, 2);
-        this.ground.body.immovable = true;
-        
         //add platforms
-        this.ledge = this.platforms.create(100, 400, "ground");
+        this.ledge = this.platforms.create(-200, 400, "ground");
         this.ledge.body.immovable = true;
+        this.ledge1 = this.platforms.create(200, 500, "ground");
+        this.ledge1.body.immovable = true;
+        this.ledge2 = this.platforms.create(600, 400, "ground");
+        this.ledge2.body.immovable = true;
         
         //star group
         this.stars = game.add.group();
@@ -54,6 +58,7 @@ game_state.main.prototype = {
             var star = this.stars.create(i * 70, 0, "star");
             star.body.gravity.y = 300;
             star.body.bounce.y = 0.7 * Math.random() * 0.2;
+            star.scale.setTo(0.5, 0.5);
             this.starList.push(star);
         }
         
@@ -65,7 +70,7 @@ game_state.main.prototype = {
         });
         
         //setup player
-        this.player = game.add.sprite(game.world.width / 2, game.world.height - 150, "knight");
+        this.player = game.add.sprite(game.world.width / 2, game.world.height - 200, "knight");
         game.physics.arcade.enable(this.player);
         //player physics properties
         this.player.body.bounce.y = 0;
@@ -190,13 +195,18 @@ game_state.main.prototype = {
             this.starList[i].body.x -= this.cameraMovement;
         }
         //platforms
-        this.ground.body.x -= this.cameraMovement;
         this.ledge.body.x -= this.cameraMovement;
+        this.ledge1.x -= this.cameraMovement;
+        this.ledge2.x -= this.cameraMovement;
         //backgrounds
         this.midBackground1.x -= this.cameraMovement / 4;
         this.midBackground2.x -= this.cameraMovement / 4;
         this.frontBackground1.x -= this.cameraMovement / 2;
         this.frontBackground2.x -= this.cameraMovement / 2;
+        
+        //lava
+        this.lava1.x -= this.cameraMovement;
+        this.lava2.x -= this.cameraMovement;
         
         //wrap backgrounds
         if (this.midBackground1.x > game.world.width) {
@@ -222,6 +232,18 @@ game_state.main.prototype = {
         }
         if (this.frontBackground2.x < -game.world.width) {
             this.frontBackground2.x = game.world.width;
+        }
+        if (this.lava1.x > game.world.width) {
+            this.lava1.x = -game.world.width;
+        }
+        if (this.lava1.x < -game.world.width) {
+            this.lava1.x = game.world.width;
+        }
+        if (this.lava2.x > game.world.width) {
+            this.lava2.x = -game.world.width;
+        }
+        if (this.lava2.x < -game.world.width) {
+            this.lava2.x = game.world.width;
         }
     },
     collectStar: function(player, star) {
