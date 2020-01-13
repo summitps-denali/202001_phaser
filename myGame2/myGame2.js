@@ -30,17 +30,21 @@ game_state.main.prototype = {
         this.frontBackground1.scale.setTo(6.3, 5);
         this.frontBackground2.scale.setTo(6.3, 5);
         
-        //setup lava
-        this.lava1 = game.add.sprite(0, game.world.height - 64, "lava");
+        //lava group
+        this.lava = game.add.group();
+        this.lava.enableBody = true;
+        //add lava
+        this.lava1 = this.lava.create(0, game.world.height - 64, "lava");
         this.lava1.scale.setTo(7, 3);
-        this.lava2 = game.add.sprite(game.world.width, game.world.height - 64, "lava");
+        this.lava1.body.immovable = true;
+        this.lava2 = this.lava.create(game.world.width, game.world.height - 64, "lava");
         this.lava2.scale.setTo(7, 3);
+        this.lava2.body.immovable = true;
         
         //platform group
         this.platforms = game.add.group();
         //enabel physics for platform group
         this.platforms.enableBody = true;
-        
         //add platforms
         this.ledge = this.platforms.create(-200, 400, "ground");
         this.ledge.body.immovable = true;
@@ -54,7 +58,7 @@ game_state.main.prototype = {
         this.stars.enableBody = true;
         this.starList = [];
         //create stars
-        for (var i = 0;i<12;i++){
+        for (var i = -3;i<15;i++){
             var star = this.stars.create(i * 70, 0, "star");
             star.body.gravity.y = 300;
             star.body.bounce.y = 0.7 * Math.random() * 0.2;
@@ -64,10 +68,7 @@ game_state.main.prototype = {
         
         //point display
         this.score = 0;
-        this.scoreText = game.add.text(16, 16, "score: " + this.score, {
-            fontSize: "32px",
-            fill: "#000",
-        });
+        this.scoreText = game.add.text(16, 16, "score: " + this.score, {fontSize: "32px", fill: "#000"});
         
         //setup player
         this.player = game.add.sprite(game.world.width / 2, game.world.height - 200, "knight");
@@ -98,10 +99,11 @@ game_state.main.prototype = {
         //player-star collection
         game.physics.arcade.collide(this.player, this.stars, this.collectStar, null, this);
         
+        //player-lava interaction
+        game.physics.arcade.collide(this.player, this.lava, this.touchLava, null, this);
+        
         //reset player x velocity
         this.player.body.velocity.x = 0;
-        
-        /**/
         
         //movement and animation
         if (this.player.body.velocity.y > 0) {
@@ -173,7 +175,10 @@ game_state.main.prototype = {
         //update score
         this.scoreText.text = "Score: " + this.score;
         
-        
+        //check for completion
+        if (this.score == 18) {
+            game.state.start("end");
+        }
         
         //camera scroll
         this.cameraMovement = this.player.body.x - (game.world.width / 2);
@@ -249,7 +254,10 @@ game_state.main.prototype = {
     collectStar: function(player, star) {
         star.kill();
         this.score += 1;
+    },
+    touchLava: function(player, lava) {
+        player.kill();
     }
 };
 game.state.add('main', game_state.main);
-game.state.start('main');
+//game.state.start('main');

@@ -1,25 +1,31 @@
 /*global Phaser game game_state*/
 
-game_state.story = function() {};
-game_state.story.prototype = {
+game_state.end = function() {};
+game_state.end.prototype = {
 
     preload: function() {
         //load images
-        game.load.image("introBack", "assets/intro.png");
+        game.load.image("endingBack", "assets/endback.png");
     },
 
     create: function() {
         //setup background
-        this.backgroundIntro = game.add.sprite(0, -100, "introBack");
-        this.backgroundIntro.scale.setTo(1.6, 1.6);
+        this.backgroundIntro = game.add.sprite(0, -100, "endingBack");
+        this.backgroundIntro.scale.setTo(3.2, 3.2);
         
         //setup text
-        this.storyText = ["For years uncounted, this beast has plauged us ->", "It has stolen  our food, our wealth,  and   our   happiness ->", "Go, seek out this monster and reclaim what it has taken ->", "STARTGAME"];
+        this.storyText = [
+            "Thank you, greatest hero ->", 
+            "Your name shall be known here forever more ->", 
+            "Credits: Game design  -  Andrew C | Art - Andrew C | Coding - Andrew C ->", 
+            "Made with - Phaser.io |  Hosted on - AWS ->", 
+            "Thanks to - Joshua D, for constant support ->", 
+            "/-----------------------\\|      THE END      |    \\-----------------------/", "END"];
         this.shownText = "";
         this.textNum = 0;
-        this.text1 = game.add.text(200, 100, "", {fontSize: "32px", fill: "#fff"});
-        this.text2 = game.add.text(200, 200, "", {fontSize: "32px", fill: "#fff"});
-        this.text3 = game.add.text(200, 300, "", {fontSize: "32px", fill: "#fff"});
+        this.text1 = game.add.text(200, 100, "", {fontSize: "32px", fill: "#000"});
+        this.text2 = game.add.text(200, 200, "", {fontSize: "32px", fill: "#000"});
+        this.text3 = game.add.text(200, 300, "", {fontSize: "32px", fill: "#000"});
         this.textAddTimer = 0;
         
         //add inputs
@@ -33,18 +39,13 @@ game_state.story.prototype = {
             if(this.shownText.length < this.storyText[this.textNum].length){
                 this.shownText += this.storyText[this.textNum][this.shownText.length];
             }
-            else if(this.cursors.right.isDown){
+            else if(this.cursors.right.isDown && this.storyText[this.textNum + 1] != "END"){
                 this.shownText = "";
                 this.textNum += 1;
             }
         }
         else {
             this.textAddTimer += 1;
-        }
-        
-        //start game on "STARTGAME"
-        if (this.storyText[this.textNum] == "STARTGAME"){
-            game.state.start("main");
         }
         
         //update text and handle lines
@@ -64,5 +65,5 @@ game_state.story.prototype = {
         }
     },
 };
-game.state.add('story', game_state.story);
-game.state.start('story');
+game.state.add('end', game_state.end);
+//game.state.start('end');
