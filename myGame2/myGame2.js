@@ -257,6 +257,7 @@ game_state.main.prototype = {
     },
     touchLava: function(player, lava) {
         player.kill();
+        game.state.start("lose");
     }
 };
 game.state.add('main', game_state.main);
