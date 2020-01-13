@@ -7,63 +7,105 @@ game_state.main = function() {};
 game_state.main.prototype = {
 
     preload: function() {
-        game.load.image('player', 'assets/player.png');
-        game.load.image('object', 'assets/object.png');
+        game.load.image('sky', 'assets/backg.jpg');
+        game.load.image('ground', 'assets/shroom.png');
+        game.load.image('groundd', 'assets/spaceship.JPG');
+        game.load.image('star', 'assets/nice.png');
+        game.load.spritesheet('dude', 'assets/cpt_boyu.png', 32, 48);
+        game.load.image('gponee', 'assets/gpone.JPG');
+        game.load.image('gptwoo', 'assets/gptwo.JPG');
+        game.load.image('gpthreee', 'assets/gpthree.JPG');
+        game.load.image('gpfourr', 'assets/gpfour.JPG');
     },
 
     create: function() {
-// Set the background color to blue
-        game.stage.backgroundColor = '#3598db';
-// Start the Arcade physics system (for movements and collisions)
+        game.add.sprite(0,0, 'star');
+        game.add.sprite(0,0, 'sky');
+        this.platforms = game.add.group();
+        this.platforms.enableBody = true;
+        var ground = this.platforms.create(-13, game.world.height - 44, 'groundd');
+        ground.scale.setTo(0.8, 0.8);
+        ground.body.immovable = true;
+        var ledge = this.platforms.create(155, 500, 'ground');
+        var ledgei = this.platforms.create(210, 400, 'ground');
+        var ledgeii = this.platforms.create(70, 300, 'ground');
+        var ledgeiii = this.platforms.create(420, 325, 'ground');
+        var ledgeiiii = this.platforms.create(560, 350, 'ground');
+        var ledgeiiiii = this.platforms.create(630, 309, 'ground');
+        var ledgeiiiiii = this.platforms.create(140, 240, 'ground');
+        ledge.body.immovable = true;
+        ledgei.body.immovable = true;
+        ledgeii.body.immovable = true;
+        ledgeiii.body.immovable = true;
+        ledgeiiii.body.immovable = true;
+        ledgeiiiii.body.immovable = true;
+        ledgeiiiiii.body.immovable = true;
+        
+        
         game.physics.startSystem(Phaser.Physics.ARCADE);
-// Add the player at the bottom of the screen
-        this.player = game.add.sprite(200, 400, 'player');
-// We need to enable physics on the this.player
+        this.player = game.add.sprite(32, game.world.height - 150, 'dude');
         game.physics.arcade.enable(this.player);
-// Enable body on player
-        this.player.enablebody = true;
-// Make sure the player won't move when it hits the ball
-        this.player.body.immovable = true;
-// Create the left/right arrow keys
-        this.left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
-        this.right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
-// Create objects group
-        this.objects = game.add.group();
-// Enable body for all objects in the group
-        this.objects.enableBody = true;
-// Anchor this object to _this variable
-        var _this = this;
-// Create objects over time
-        setInterval(function() {
-// create an object at the top of the screen at a random x
-        var object = _this.objects.create(Math.random() *800, -64, 'object');
-    
-// Let gravity do its thing
-    object.body.gravity.y = 300;
-}, 1000); // 1000 = 1000ms = 1 second
+        this.player.body.bounce.y = 0.0;
+        this.player.body.gravity.y = 555;
+        this.player.body.collideWorldBounds = true;
+        this.player.animations.add('left', [0, 1, 2, 3], 10, true);
+        this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.cursors = game.input.keyboard.createCursorKeys();
+        this.space = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        this.stars = game.add.group();
+        this.stars.enableBody = true;
+        for (var i = 0; i < 12; i++) {
+            var star = this.stars.create(i * 70, 0, 'star');
+            star.body.gravity.y = 300;
+            star.body.bounce.y = 0.99 + Math.random() * 0.02;
+            
+            }
+        this.scoreText = game.add.text(16, 16, 'Thingies Left: 12', {
+            fontsize: '32px',
+            fill: '#000'
+        });
+        this.score = 12;
+        // add the gp sprites here
     },
 
     update: function() {
-// Move the player left/right when an arrow key is pressed
-        if (this.left.isDown) {
-            this.body.player.velocity.x = 300;
-}
-        else if (this.right.isDown) {
-            this.player.body.velocity.x = 300;
-}
-// Stop the player when no key is pressed
+        game.physics.arcade.collide(this.player, this.platforms);
+        this.player.body.velocity.x = 0;
+        if (this.cursors.left.isDown) {
+            this.player.body.velocity.x = -525;
+            game.time.slowMotion = 3.5;
+            this.player.animations.play('left');
+        }
+        else if (this.cursors.right.isDown) {
+            this.player.body.velocity.x = 525;
+            game.time.slowMotion = 3.5;            
+            this.player.animations.play('right');
+        }
         else {
-            this.player.body.velocity.x = 0;
-}
-//Collision between the player and the object
-        game.physics.arcade.overlap(this.player, this.objects, this.hitObject, null, this);
-
-
-},
-        hitObject: function(player, object){
-            object.kill();
-} 
-},
+            this.player.animations.stop();
+            this.player.frame = 4;
+            game.time.slowMotion = 1.0;
+        }
+        if (this.cursors.up.isDown && this.player.body.touching.down) {
+            this.player.body.velocity.y = -350;
+        }    
+        else if (this.cursors.down.isDown) {
+            this.player.body.velocity.y = 355;
+        if (this.cursors.down.isDown && this.player.body.touching.down) {
+            this.player.frame = 9;
+            } 
+        }
+        game.physics.arcade.collide(this.stars, this.platforms);
+        game.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
+    },
     
+    collectStar: function(player, star) {
+        star.kill();
+        this.score --;
+        this.scoreText.text = "Thingies Left: " + this.score;
+    },
+    
+    
+};
 game.state.add('main', game_state.main);
 game.state.start('main');                                           
