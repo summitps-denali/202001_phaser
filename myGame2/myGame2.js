@@ -9,14 +9,16 @@ game_state.main.prototype = {
     preload: function() {
         game.load.image('player', 'assets/player.png');
         game.load.image('object', 'assets/object.png');
+        game.load.spritesheet('player', 'assets/New Piskel.png', 100, 100);
     },
 
     create: function() {
         game.stage.backgroundColor = '#3598db';
         game.physics.startSystem(Phaser.Physics.ARCADE);
-        this.player = game.add.sprite(200, 400, 'player');
+        this.player = game.add.sprite(400, 400, 'player');
         game.physics.arcade.enable(this.player);
         this.player.enableBody = true;
+        this.player.body.setSize(60,85,20,5);
         this.player.body.immovable = true;
         this.left = game.input.keyboard.addKey(Phaser.Keyboard.LEFT);
         this.right = game.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
@@ -27,6 +29,18 @@ game_state.main.prototype = {
            var object = _this.objects.create(Math.random() * 800, -64, 'object');
            object.body.gravity.y = 300;
         }, 1000)
+        this.player.animations.add('left', [2, 3, 4, 5, 6, 7], 10, true);
+        if (this.cursors.left.isDown) {
+            this.player.body.velocity.x = -300;
+            this.player.animations.play('left');
+        }
+        this.player.animations.add('right', [8, 9, 10, 11, 12, 13], 10, true);
+        if (this.cursors.right.isDown) {
+            this.player.body.velocity.x = 300;
+            this.player.animations.play('right');
+        }
+        this.player.animations.stop();
+        this.player.frame = 0;
     },
 
     update: function() {
