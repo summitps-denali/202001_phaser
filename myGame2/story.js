@@ -28,7 +28,7 @@ game_state.story.prototype = {
 
     update: function() {
         //change text
-        if(this.textAddTimer > 5) {
+        if(this.textAddTimer > 5 || (this.textAddTimer > 1 && this.cursors.right.isDown)) {
             this.textAddTimer = 0;
             if(this.shownText.length < this.storyText[this.textNum].length){
                 this.shownText += this.storyText[this.textNum][this.shownText.length];

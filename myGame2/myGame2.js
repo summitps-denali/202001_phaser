@@ -68,7 +68,7 @@ game_state.main.prototype = {
         
         //point display
         this.score = 0;
-        this.scoreText = game.add.text(16, 16, "score: " + this.score, {fontSize: "32px", fill: "#000"});
+        this.scoreText = game.add.text(16, 16, "Collected treasure: " + this.score + "/18", {fontSize: "32px", fill: "#000"});
         
         //setup player
         this.player = game.add.sprite(game.world.width / 2, game.world.height - 200, "knight");
@@ -173,11 +173,11 @@ game_state.main.prototype = {
         }
         
         //update score
-        this.scoreText.text = "Score: " + this.score;
+        this.scoreText.text = "Collected treasure: " + this.score + "/18";
         
         //check for completion
         if (this.score == 18) {
-            game.state.start("end");
+            game.state.start("cutscene");
         }
         
         //camera scroll
@@ -190,9 +190,9 @@ game_state.main.prototype = {
                 this.cameraMovement = -10;
             }
         }
-        if (this.cursors.down.isDown) {//disable scrolling
+        /*if (this.cursors.down.isDown) {//disable scrolling
             this.cameraMovement = 0;
-        }
+        }*/
         //player
         this.player.body.x -= this.cameraMovement;
         //stars
@@ -261,4 +261,3 @@ game_state.main.prototype = {
     }
 };
 game.state.add('main', game_state.main);
-//game.state.start('main');

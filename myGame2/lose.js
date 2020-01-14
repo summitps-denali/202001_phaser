@@ -15,7 +15,7 @@ game_state.lose.prototype = {
         
         //setup text
         this.storyText = [
-            "Alas, our great hero has been vanquished ->", "Quick, seach the kingdom for one more worthy ->", "STARTGAME"];
+            "Alas, our great hero has been vanquished ->", "Quick, search the kingdom for one more worthy ->", "STARTGAME"];
         this.shownText = "";
         this.textNum = 0;
         this.text1 = game.add.text(200, 100, "", {fontSize: "32px", fill: "#fff"});
@@ -29,7 +29,7 @@ game_state.lose.prototype = {
 
     update: function() {
         //change text
-        if(this.textAddTimer > 5) {
+        if(this.textAddTimer > 5 || (this.textAddTimer > 1 && this.cursors.right.isDown)) {
             this.textAddTimer = 0;
             if(this.shownText.length < this.storyText[this.textNum].length){
                 this.shownText += this.storyText[this.textNum][this.shownText.length];
@@ -66,4 +66,3 @@ game_state.lose.prototype = {
     },
 };
 game.state.add('lose', game_state.lose);
-//game.state.start('lose');
