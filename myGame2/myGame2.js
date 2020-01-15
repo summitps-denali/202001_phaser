@@ -37,6 +37,7 @@ game_state.main.prototype = {
         var _this = this;                   //  BALL, need this for timer
         var delayTimer = setInterval(function() {  //  BALL, every second timer
             var object = _this.objects.create(
+//            game.input.x,
               Math.random()*800,    //  x position
               -64,                  //  y position (just above viewable window)
               'object'
