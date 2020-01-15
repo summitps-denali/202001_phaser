@@ -10,7 +10,7 @@ class Explosion extends Phaser.GameObjects.Sprite{
     //scene.physics.world.enableBody(this);
 	//this.body.setSize(32, 32);
 	this.angle = 0;
-	this.setScale(2, 2);
+	//this.setScale(2, 2);
     //this.body.setCollideWorldBounds(true);
     //scene.projectiles.add(this);
 

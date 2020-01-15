@@ -5,12 +5,19 @@ class scene1 extends Phaser.Scene{
 	}
 	preload(){
 	    this.load.image('ground', 'assets/platform.png');
+	    this.load.image('box', 'assets/box.png');
 	    this.load.spritesheet('missile', 'assets/missile.png', {frameWidth: 150, frameHeight: 30});
+	    this.load.image('bullet', 'assets/bullet.png');
 	    this.load.spritesheet('fire', 'assets/effects/fire.png', {frameWidth: 100, frameHeight: 100});
 	    this.load.spritesheet('missileExplosion', 'assets/effects/missileExplosion.png', {frameWidth: 100, frameHeight: 100});
-	    this.load.spritesheet('dude', 'assets/dude.png', { frameWidth: 32, frameHeight: 48 });
-	    this.load.spritesheet('mech', 'assets/mechWalk.png', { frameWidth: 77, frameHeight: 72 });
-	    this.load.spritesheet('lilMech', 'assets/littleGuy.png', { frameWidth: 64, frameHeight: 64 });
+	    this.load.image('mech', 'assets/bigRobo.png');
+	    this.load.image('enemyMech1', 'assets/enemyMech1.png');
+	    this.load.spritesheet('minigun', 'assets/minigun.png', {frameWidth: 50, frameHeight: 51});
+	    
+	    this.load.image('shadow', 'assets/silhouette.png');
+	    this.load.spritesheet('player', 'assets/playerSprite.png', { frameWidth: 34, frameHeight: 49 });
+	    this.load.spritesheet('playerMech1', 'assets/playerMech1.png', { frameWidth: 130, frameHeight: 130 });
+	    //
 	    this.load.spritesheet('rocketCounter', 'assets/UI/rocketCounter.png', { frameWidth: 32, frameHeight: 32 });
 	    this.load.spritesheet('bulletCounter', 'assets/UI/bulletCounter.png', { frameWidth: 32, frameHeight: 32 });
 	    this.load.spritesheet('coolantActive', 'assets/UI/coolantActive.png', { frameWidth: 32, frameHeight: 32 });
@@ -33,6 +40,7 @@ class scene1 extends Phaser.Scene{
 	}
 	create() {
 		this.add.text(20, 20, "Loading game", {font: "25px Arial", fill: "white"});
+		
 		this.anims.create({
         key: 'fireAnim',
         frames: this.anims.generateFrameNumbers('missile', { start: 0, end: 60 }),
