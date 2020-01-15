@@ -1,5 +1,8 @@
 /*  global this, game, game_state, Phaser  */
 
+const duckSound = new Audio();
+duckSound.src = "assets/duckQuack.mp3";
+
 game_state.intro = function() {};
 
 game_state.intro.prototype = {
@@ -12,7 +15,7 @@ game_state.intro.prototype = {
 
         this.text = game.add.text(
             20, 20,
-            's: start\nx: quit', {
+            's: start\nx: quit\na: auto test', {
               fontSize: '32px',
               fill: '#000'
             }
@@ -25,6 +28,9 @@ game_state.intro.prototype = {
                 //  disable keyboard callback
                 game.input.keyboard.onPressCallback = null;
                 game.state.start('main');
+            }
+            else if (e == 'a') {
+                duckSound.play(1);
             }
         }
 
