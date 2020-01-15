@@ -1,4 +1,4 @@
-/*  global game, game_state, Phaser  */
+/*  global game game_state Phaser duckSound  */
 
 game_state.main = function() {};
 
@@ -90,6 +90,7 @@ game_state.main.prototype = {
         this.game_score++;
         console.log("score: " + this.game_score);
         object.kill();
+        duckSound.play(1);
     },
     
 };
