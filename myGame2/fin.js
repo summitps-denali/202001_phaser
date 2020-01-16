@@ -5,28 +5,20 @@ game_state.fin = function() {};
 game_state.fin.prototype = {
 
     preload: function() {
+        game.load.image('sky', 'assets/background.png');
     },
 
     create: function() {
-        game.stage.backgroundColor = '#00A9DC';
+        
+        game.add.sprite(0, 0, 'sky');
 
         this.text = game.add.text(
-            250, 275,
-            '    THE END', {
+            250, 250,
+            'THE END', {
               fontSize: '64px',
-              fill: '#FFF'
+              fill: '#000'
             }
         );
-
-        //  Simple check for keyboard, press s switch to main game screen
-        game.input.keyboard.onPressCallback = function(e) {
-            console.log("key pressed: ", e);
-            if (e == 's') {
-                //  disable keyboard callback
-                game.input.keyboard.onPressCallback = null;
-                game.state.start('main');
-            }
-        }
 
     },
 

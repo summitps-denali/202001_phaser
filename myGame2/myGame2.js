@@ -4,7 +4,7 @@ game_state.main = function() {};
 game_state.main.prototype = {
 
     preload: function() {
-        game.load.image('sky', 'assets/sky.png');
+        game.load.image('sky', 'assets/background.png');
         game.load.image('ground', 'assets/platform.png');
         game.load.image('star', 'assets/berry1.png');
         game.load.spritesheet('dude', 'assets/slug.png', 144, 144);
