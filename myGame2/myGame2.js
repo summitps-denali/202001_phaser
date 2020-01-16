@@ -35,7 +35,7 @@ game_state.main.prototype = {
        var ledge = this.platforms.create(600, 150, 'smaller platform');
        ledge.body.immovable = true;
        
-       this.comGroup = game.add.group();
+      this.comGroup = game.add.group();
        this.comGroup.enableBody = true;
        this.computer = this.comGroup.create(700, 67, 'computer');
        this.computer.body.immovable = true;
