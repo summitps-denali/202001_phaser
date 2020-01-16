@@ -13,8 +13,17 @@
 </head>
 <body>
 
+<script>
+/*  global Phaser game game_state  */
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
+var game_state = {}
+</script>
+<script type="text/javascript" src="intro.js"></script>
 <script type="text/javascript" src="myGame2.js"></script>
-<script type="text/javascript" src="story.js"></script>
+<script>
+/*  global Phaser game game_state  */
+game.state.start('intro');
+</script>
 
 </body>
 </html>
