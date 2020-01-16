@@ -1,0 +1,4 @@
+Make sure to pull down phaser folder
+ git remote -v
+origin  https://github.com/photonstorm/phaser.git (fetch)
+origin  https://github.com/photonstorm/phaser.git (push)
