@@ -10,7 +10,7 @@ game_state.main.prototype = {
         game.load.image('sky', 'assets/sky.png');
         game.load.image('ground', 'assets/platform.png');
         game.load.image('star', 'assets/star.png');
-        game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+        game.load.spritesheet('New piskel', 'assets/New Piskel.png', 39, 39);
     },
 
     create: function() {
@@ -32,13 +32,13 @@ game_state.main.prototype = {
         ledge3.body.immovable = true;
     
         game.physics.startSystem(Phaser.Physics.ARCADE);
-        this.player = game.add.sprite(32, game.world.height - 150, 'dude');
+        this.player = game.add.sprite(32, game.world.height - 150, 'New piskel');
         game.physics.arcade.enable(this.player);
         this.player.body.bounce.y = 0.2;
         this.player.body.gravity.y = 300;
         this.player.body.collideWorldBounds = true;
-        this.player.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.player.animations.add('left', [ 6, 7, 8, 9, 10], 12, true);
+        this.player.animations.add('right', [0, 1, 2, 3, 4], 12, true);
         this.cursors = game.input.keyboard.createCursorKeys();
         
         this.stars = game.add.group();
@@ -70,7 +70,7 @@ game_state.main.prototype = {
         }
         else {
             this.player.animations.stop();
-            this.player.frame = 4;
+            this.player.frame = 5;
         }
         if (this.cursors.up.isDown && this.player.body.touching.down){
             this.player.body.velocity.y = -350;
