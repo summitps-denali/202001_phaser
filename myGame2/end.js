@@ -13,6 +13,11 @@ game_state.end.prototype = {
         this.backgroundIntro = game.add.sprite(0, -100, "endingBack");
         this.backgroundIntro.scale.setTo(3.2, 3.2);
         
+        //Rick
+        this.sound = new Audio();
+        this.sound.src = "assets/MrRick.mp3";
+        this.sound.play(1);
+        
         //setup text
         this.storyText = [
             "Thank you, greatest hero ->", 

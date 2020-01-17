@@ -18,6 +18,12 @@ game_state.boss.prototype = {
     },
 
     create: function() {
+        //sounds
+        this.fire = new Audio();
+        this.fire.src = "assets/fire.wav";
+        this.fireHold = new Audio();
+        this.fireHold.src = "assets/fireHold.wav";
+        
         //enable physics
         game.physics.startSystem(Phaser.Physics.ARCADE);
         
@@ -60,9 +66,9 @@ game_state.boss.prototype = {
         this.starList = [];
         
         //point display
-        this.score = 5;
+        this.score = 1;
         this.scoreText = game.add.text(16, 16, "Boss HP: " + this.score, {fontSize: "32px", fill: "#000"});
-        this.hp = 5;
+        this.hp = 10;
         this.hpText = game.add.text(game.world.width - 200, 16, "Player HP: " + this.hp);
         
         //setup player
@@ -238,6 +244,7 @@ game_state.boss.prototype = {
                 star.body.velocity.y = Math.random() * 200 - 100;
                 star.scale.setTo(0.5, 0.5);
                 this.starList.push(star);
+                this.fire.play(1);
             }
         }
         if (this.bossAttack == "lava") {
@@ -303,9 +310,10 @@ game_state.boss.prototype = {
         }
     },
     touchLava: function(player, lava) {
-        player.kill();
-        game.state.start("lose");
-        game.input.keyboard.onPressCallback = null;
+        if (this.playerDamageCooldown == 0) {
+            this.hp -= 1;
+            this.playerDamageCooldown = 50;
+        }
     },
     touchBoss: function(player, boss) {
         if (this.bossAttack == "fire") {

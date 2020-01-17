@@ -14,7 +14,7 @@ game_state.story.prototype = {
         this.backgroundIntro.scale.setTo(1.6, 1.6);
         
         //setup text
-        this.storyText = ["For years uncounted, this beast has plauged us ->", "It has stolen  our food, our wealth,  and   our   happiness ->", "Go, seek out this monster and reclaim what it has taken ->", "STARTGAME"];
+        this.storyText = ["Controls: < and > to move^ to jump, V for tea.    Space to use sword. >", "Hold  >  to  make  text  scroll faster, and good  luck >", "For years uncounted, this beast has plauged us ->", "It has stolen  our food, our wealth,  and   our   happiness ->", "Go, seek out this monster and reclaim what it has taken ->", "STARTGAME"];
         this.shownText = "";
         this.textNum = 0;
         this.text1 = game.add.text(200, 100, "", {fontSize: "32px", fill: "#fff"});
