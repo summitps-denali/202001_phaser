@@ -13,7 +13,7 @@ game_state.main.prototype = {
         game.load.image('sky', 'assets/sky.png');
         game.load.image('ground', 'assets/platform.png');
         game.load.image('star', 'assets/star.png');
-        game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+        game.load.spritesheet('player', 'assets/Java.png', 32, 48);
     },
 
     create: function() {
@@ -30,13 +30,14 @@ game_state.main.prototype = {
         ledge.body.immovable = true;
         var ledge = this.platforms.create(400, 434, 'ground');
         ledge.body.immovable = true;
-        this.player = game.add.sprite(32, game.world.height - 150, 'dude');
+        this.player = game.add.sprite(32, game.world.height - 150, 'player');
+        this.player.scale.setTo(0.5, 0.5);
         game.physics.arcade.enable(this.player);
         this.player.body.bounce.y = 0.1;
         this.player.body.gravity.y = 500;
         this.player.body.collideWorldBounds = true;
-        this.player.animations.add('left', [0, 1, 2, 3], 10, true);
-        this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+        this.player.animations.add('left', [0, 1, 2], 10, true);
+        this.player.animations.add('right', [4, 5, 6], 10, true);
         this.stars = game.add.group();
         this.stars.enableBody = true;
         for (var i = 0; i < 12; i++){
@@ -62,23 +63,25 @@ game_state.main.prototype = {
       }
       else if (this.cursors.right.isDown) {
           this.player.body.velocity.x = 150;
-          this.player.animations.play('right');
+          this.player.animations.play('right`');
       }
       else {
           this.player.animations.stop();
-          this.player.frame = 4;
+          this.player.frame = 3;
       }
       if (this.cursors.up.isDown & this.player.body.touching.down) {
           this.player.body.velocity.y = -350;
       }
       game.physics.arcade.collide(this.stars, this.platforms);
       game.physics.arcade.overlap(this.player, this.stars, this.collectStar, null, this);
-      this.scoreText.text = 'score' + this.score;
+      this.scoreText.text = 'score: ' + this.score;
+      game.debug.body(this.player);
     },
     collectStar: function(player, star) {
         star.kill();
         this.score +=1;
     }
+   
 
 
     
