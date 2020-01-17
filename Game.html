@@ -11,6 +11,7 @@
 
     <script src="bullet.js"></script>
     <script src="turret.js"></script>
+    <script src="TitleScene.js"></script>
     <style type="text/css">
         body {
             margin: 0;
@@ -30,7 +31,7 @@
                 default: 'arcade',
                 arcade: {
                     gravity: { y: 300 },
-                    debug: true,
+                    debug: false,
                 }
             },
             scene: {
@@ -39,19 +40,6 @@
                 update: update
             }
         };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
         var game = new Phaser.Game(config);
 
@@ -252,7 +240,7 @@
                 player.setVelocityX(0);
                 bulletTimer = 1;
                 var bullet = new Bullet(this);
-                //var turret = new Turret(this);
+                var turret = new Turret(this);
 
                 bulletTimerEvent = this.time.addEvent({ delay: 100, callback: resetBulletCoolDown, callbackScope: this, repeat: 0 });
 

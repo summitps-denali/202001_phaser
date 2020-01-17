@@ -1,7 +1,7 @@
 class Bullet extends Phaser.GameObjects.Sprite {
-    constructor(scene) {
-        var x = player.x;
-        var y = player.y;
+    constructor(scene, x, y) {
+        // var x = player.x;
+        // var y = player.y;
         var yrng = Phaser.Math.Between(-10, 10);
         var xrng = Phaser.Math.Between(-20, 20);
         super(scene, x, y, "bullet");
