@@ -3,6 +3,7 @@
 <head> 
 	<meta charset="UTF-8" />
     <title>Phaser - Making your first game, part 9</title>
+    <script src="https://summitps.zaptech.org/inline-console.min.js"></script>
     <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
     <style type="text/css">
         body {
@@ -10,10 +11,19 @@
         }
     </style>
 </head>
+
 <body>
 
+<script>
+/*  global Phaser  */
+var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
+var game_state = {};
+</script>
+<script type="text/javascript" src="intro.js"></script>
 <script type="text/javascript" src="myGame2.js"></script>
-<script type="text/javascript" src="story.js"></script>
-
+<script>
+/*  global game  */
+game.state.start('intro');
+</script>
 </body>
 </html>
