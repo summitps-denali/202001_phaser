@@ -6,6 +6,9 @@ Thumbs.db
 *.sublime-project
 *.sublime-workspace
 
+# # Phaser
+phaser/
+
 # Vendors
 node_modules/
 
