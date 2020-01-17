@@ -10,7 +10,8 @@ game_state.main.prototype = {
     game.load.image('sky', 'assets/sky.png');
     game.load.image('ground', 'assets/platform.png');
     game.load.image('star', 'assets/star.png');
-    game.load.spritesheet('dude', 'assets/dude.png', 32, 48);
+    game.load.spritesheet('NewPiskel',
+      'assets/New Piskel (6).png', 49, 49);
     },
 
     create: function() {
@@ -21,7 +22,7 @@ game_state.main.prototype = {
     //physics
     game.physics.startSystem(Phaser.Physics.ARCADE);
     
-    game.add.sprite(800000, 800000, 'star');
+    game.add.sprite(0, 0, 'star');
     //platforms
     this.platforms = game.add.group();
     this.platforms.enableBody = true;
@@ -34,18 +35,21 @@ game_state.main.prototype = {
     //creating ledges
     var ledge = this.platforms.create(130, 450, 'ground');
     ledge.body.immovable = true;
+    var ledge = this.platforms.create(260, 290, 'ground');
+    ledge.body.immovable = true;
     
     //player
-    this.player = game.add.sprite(32, game.world.height - 150, 'dude');
+    this.player = game.add.sprite(32, game.world.height - 150, 'NewPiskel');
     game.physics.arcade.enable(this.player);
-    
+    /*this.player.scale.setTo(0.5, 0.5);
+    this.player.body.setSize(72, 72, 10, 10);*/
     //physics property's
     this.player.body.bounce.y = 0.2;
-    this.player.body.gravity.y = 300;
+    this.player.body.gravity.y = 320;
     this.player.body.collideWorldBounds = true;
     //Animations
-    this.player.animations.add('left', [0, 1, 2, 3,], 10, true);
     this.player.animations.add('right', [5, 6, 7, 8], 10, true);
+    this.player.animations.add('left', [0, 1, 2, 3,], 10, true);
     //controls
     this.cursors = game.input.keyboard.createCursorKeys();
     
@@ -74,7 +78,6 @@ game_state.main.prototype = {
     update: function() {
     //colisions
     game.physics.arcade.collide(this.player, this.platforms);
-    
     //Reset players velocity
     this.player.body.velocity.x = 0;
     
@@ -92,12 +95,12 @@ game_state.main.prototype = {
     else {
         //Idle
         this.player.animations.stop();
-        this.player.framw = 4;
+        this.player.frame = 4;
     }
     
     //jump
     if (this.cursors.up.isDown && this.player.body.touching.down){
-        this.player.body.velocity.y = -250;
+        this.player.body.velocity.y = -350;
     }
     //Collision for stars
     game.physics.arcade.collide(this.stars, this.platforms);
@@ -112,7 +115,7 @@ game_state.main.prototype = {
     star.kill();
     this.scoreText.text = 'Score:' + this.score;
 }
-}
+};
 
 game.state.add('main', game_state.main);
 game.state.start('main');
