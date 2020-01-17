@@ -1,0 +1,27 @@
+<!doctype html> 
+<html lang="en"> 
+<head> 
+	<meta charset="UTF-8" />
+    <title>New Game</title>
+    <script src="//cdn.jsdelivr.net/phaser/2.2.2/phaser.min.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+<script>
+    var maxFuel = 5000;
+    var maxHull = 300;
+    var locations = {"home":{"discovered":true, "x":1600, "y":1200}};
+</script>
+<script type="text/javascript" src="space.js"></script>
+<script type="text/javascript" src="platformer.js"></script>
+<script>
+    game.state.start('space'); /*global game*/
+</script>
+
+</body>
+</html>
