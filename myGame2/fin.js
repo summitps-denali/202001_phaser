@@ -1,18 +1,18 @@
 /*  global Phaser game game_state  */
 
-game_state.intro = function() {};
+game_state.fin = function() {};
 
-game_state.intro.prototype = {
+game_state.fin.prototype = {
 
     preload: function() {
     },
 
     create: function() {
-        game.stage.backgroundColor = '#009800';
+        game.stage.backgroundColor = '#000098';
 
         this.text = game.add.text(
             20, 20,
-            'Collect the cupcakes for your friends!\ns: start\nx: quit', {
+            's: start\nx: quit', {
               fontSize: '32px',
               fill: '#000'
             }
@@ -35,4 +35,4 @@ game_state.intro.prototype = {
 
 };
 
-game.state.add('intro', game_state.intro);
+game.state.add('fin', game_state.fin);
