@@ -5,10 +5,14 @@ game_state.intro = function() {};
 game_state.intro.prototype = {
 
     preload: function() {
+        game.load.spritesheet('beginning', 'assets/New Piskel (1).png', 600, 600);
     },
 
     create: function() {
-        game.stage.backgroundColor = '#009800';
+        game.stage.backgroundColor = '#5175ff';
+        this.player = game.add.sprite(100, game.world.height - 599, 'beginning');
+        this.player.animations.add('move', [0, 1, 2, 3, 4, 5, 6], 6, true);
+        this.player.animations.play('move');
 
         this.text = game.add.text(
             20, 20,

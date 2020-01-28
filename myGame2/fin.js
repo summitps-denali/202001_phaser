@@ -5,14 +5,16 @@ game_state.fin = function() {};
 game_state.fin.prototype = {
 
     preload: function() {
+        game.load.image('ending', 'assets/EndScreen1.png');
     },
 
     create: function() {
-        game.stage.backgroundColor = '#000098';
+        game.stage.backgroundColor = '#fdddff';
+        game.add.sprite(100, 10, 'ending');
 
         this.text = game.add.text(
             20, 20,
-            's: start\nx: quit', {
+            'Cupcakes for everyone!\ns: start\nx: quit', {
               fontSize: '32px',
               fill: '#000'
             }

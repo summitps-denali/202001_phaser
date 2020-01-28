@@ -41,7 +41,7 @@ game_state.main.prototype = {
         this.cupcake.scale.y = 0.5;
         this.cupcake.enableBody = true;
         for (var i = 0; i < 12; i++) {
-            var cupcake = this.cupcake.create(i * 70, 0, 'cupcake');
+            var cupcake = this.cupcake.create(i * 133, 0, 'cupcake');
             cupcake.body.gravity.y = 300;
             cupcake.body.bounce.y = 0.3 + Math.random() * 0.2;
         }
