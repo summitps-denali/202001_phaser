@@ -8,12 +8,12 @@ game_state.intro.prototype = {
     },
 
     create: function() {
-        game.stage.backgroundColor = '#009800';
+        game.stage.backgroundColor = '#346beb';
 
         this.text = game.add.text(
-            20, 20,
+            350, 20,
             's: start\nx: quit', {
-              fontSize: '32px',
+              fontSize: '50px',
               fill: '#000'
             }
         );

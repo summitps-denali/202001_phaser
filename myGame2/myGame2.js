@@ -39,12 +39,16 @@ game_state.main.prototype = {
         ledge.body.immovable = true;
         game.physics.startSystem(Phaser.Physics.ARCADE);
 
+        var ledge = this.platforms.create(300, 100, "ground");
+        ledge.body.immovable = true;
+        game.physics.startSystem(Phaser.Physics.ARCADE);
+
 
 
         this.player = game.add.sprite(32, game.world.height - 150, 'dude');
         game.physics.arcade.enable(this.player);
 
-        this.player.body.bounce.y = 0.1;
+        this.player.body.bounce.y = 0.2;
         this.player.body.gravity.y = 400;
         this.player.body.collideWorldBounds = true;
 
