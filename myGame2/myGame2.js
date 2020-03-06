@@ -1,7 +1,4 @@
-/*global Phaser*/
-
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
-var game_state = {}
+/*  global Phaser game game_state  */
 
 game_state.main = function() {};
 game_state.main.prototype = {
@@ -10,7 +7,7 @@ game_state.main.prototype = {
         game.load.image('sky','assets/sky.png');   
         game.load.image('ground','assets/platform.png');
         game.load.image('star','assets/star.png');
-        game.load.spritesheet('dude','assets/dude.png',32,48);
+        game.load.spritesheet('dude','assets/bird.png', 100,100);
     },
 
     create: function() {
@@ -101,4 +98,3 @@ game_state.main.prototype = {
 };
 
 game.state.add('main', game_state.main);
-game.state.start('main');
