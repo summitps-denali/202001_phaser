@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>¯\_(ツ)_/¯</title>
+    <script src="//cdn.jsdelivr.net/npm/phaser@3.11.0/dist/phaser.js"></script>
+
+    <script src="boss.js"></script>
+    <style type="text/css">
+        body {
+            margin: 0;
+        }
+    </style>
+</head>
+
+<body>
+
+    <script type="text/javascript">
+        var config = {
+            type: Phaser.AUTO,
+            width: 1500,
+            height: 800,
+            pixelArt: true,
+            physics: {
+                default: 'arcade',
+                arcade: {
+                    gravity: { y: 300 },
+                    debug: false
+                }
+            },
+            scene: {
+                preload: preload,
+                create: create,
+                update: update
+            }
+        };
+
+        var game = new Phaser.Game(config);
+        var cam;
+        var platforms;
+        /*global player*/
+        var cursors;
+        var stars;
+        var score = 0;
+        var scoreText;
+        var bombs;
+        var gameOver;
+        var boss; //object
+        var isBossAlive = false;
+        var laser;
+        var minion;
+        var xposition;
+        var health = 20;
+        var healthText;
+        var laserCoolDown = true;
+        var timedEvent;
+        var blank = true;
+
+
+        function preload() {
+            this.load.image('hell', 'assets/hell.png');
+            this.load.spritesheet('laser', 'assets/laser.png', { frameWidth: 410, frameHeight: 100 });
+            this.load.image('minion', 'assets/minion.png');
+            this.load.image('ground', 'assets/platform.png');
+            this.load.image('star', 'assets/star.png');
+            this.load.image('bomb', 'assets/bomb.png');
+            this.load.image('boss', 'assets/boss.png');
+            this.load.spritesheet('Slimey', 'assets/Slimey.png', { frameWidth: 32, frameHeight: 21.5 });
+            this.load.image('minion', 'assets/minion.png')
+        }
+
+        function create() {
+            cam = this.cameras.main;
+            var hell = this.add.image(400, 300, 'hell');
+            hell.setScale(9, 9);
+            platforms = this.physics.add.staticGroup();
+            platforms.create(900, 800, 'ground').setDisplaySize(1000000000000, 400).refreshBody();
+            platforms.create(400, 500, 'ground');
+            platforms.create(50, 385, 'ground');
+            platforms.create(600, 375, 'ground');
+            minion = this.physics.add.sprite(2000, 300, 'minion');
+            player = this.physics.add.sprite(100, 450, 'Slimey');
+            //player.setCollideWorldBounds(true);
+            player.body.setGravityY(350)
+            cam.startFollow(player, true);
+
+            boss = this.physics.add.sprite(2000, 300, 'boss');
+            boss.setGravityY(-300);
+            boss.setOrigin(0.5, 0.5);
+            laser = this.physics.add.sprite(2000, 300, 'laser');
+            laser.setGravityY(-300);
+            laser.setAlpha(0);
+            //alert("" + boss.x + ", " + boss.y);
+
+
+
+            this.anims.create({
+                key: 'left',
+                frames: this.anims.generateFrameNumbers('Slimey', { start: 0, end: 1 }),
+                frameRate: 5,
+                repeat: -1
+            });
+
+            this.anims.create({
+                key: 'turn',
+                frames: [{ key: 'Slimey', frame: 2 }],
+                frameRate: 10
+            });
+
+            this.anims.create({
+                key: 'right',
+                frames: this.anims.generateFrameNumbers('Slimey', { start: 3, end: 4 }),
+                frameRate: 5,
+                repeat: -1
+            });
+
+            this.physics.add.collider(player, platforms);
+
+            cursors = this.input.keyboard.createCursorKeys();
+
+            stars = this.physics.add.group({
+                key: 'star',
+                repeat: 11,
+                setXY: { x: 12, y: 0, stepX: 70 }
+            });
+
+            stars.children.iterate(function(child) {
+
+                child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+
+            });
+
+            this.physics.add.collider(stars, platforms);
+            this.physics.add.overlap(player, stars, collectStar, null, this);
+            scoreText = this.add.text(16, 16, 'score: 0', { fontSize: '32px', fill: '#000' }).setScrollFactor(0);
+            bombs = this.physics.add.group();
+
+            healthText = this.add.text(950, 16, 'health:20', { fontSize: '32px', fill: '#100' }).setScrollFactor(0)
+
+            this.physics.add.collider(bombs, platforms);
+
+            this.physics.add.collider(player, bombs, hitBomb, null, this);
+            if (laserCoolDown) {
+                this.physics.add.collider(player, laser, hitPlayer);
+            }
+            timedEvent = this.time.addEvent({ delay: 3000, callback: laserAppear, callbackScope: this });
+        } //end create
+
+        function update() {
+            xposition = player.x - boss.x;
+            if (xposition < 0) {
+                xposition *= -1;
+            }
+            if (cursors.left.isDown) {
+                player.setVelocityX(-160);
+
+                player.anims.play('left', true);
+            }
+            else if (cursors.right.isDown) {
+                player.setVelocityX(160);
+
+                player.anims.play('right', true);
+            }
+            else {
+                player.setVelocityX(0);
+
+                player.anims.play('turn');
+            }
+
+            if (cursors.space.isDown && player.body.touching.down) {
+                player.setVelocityY(-400);
+            }
+
+
+            if (isBossAlive == false) {
+                // boss = this.physics.add.sprite(2000, 300, 'boss');
+                isBossAlive = true;
+                boss.x = 400;
+                boss.y = 300;
+                //alert("" + boss.x + ", " + boss.y);
+                //var bullet = new Bullet(this);
+            }
+            if (isBossAlive) {
+                if (player.x > boss.x) {
+                    boss.setVelocityX(xposition / 4);
+                }
+                else if (player.x < boss.x) {
+                    boss.setVelocityX(-xposition / 4);
+                }
+                if (player.y > boss.y) {
+                    boss.setVelocityY(120);
+                }
+                else if (player.y < boss.y) {
+                    boss.setVelocityY(-120);
+                }
+                if (player.x > boss.x) {
+                    boss.flipX = true;
+                }
+                if (player.x < boss.x) {
+                    boss.flipX = false;
+                }
+
+            }
+            // laser.x = 400;
+            // laser.y = 300;
+            laser.x = boss.x;
+            laser.y = boss.y;
+            minion.x = boss.x;
+            minion.y = 200
+            laser.setRotation(boss.rotation);
+
+            if (boss.flipX == true) {
+                laser.flipX = false;
+                laser.x += 350;
+            }
+            else {
+                laser.flipX = true;
+                laser.x -= 350;
+            }
+            debug = true;
+        } //end update
+
+        function collectStar(player, star) {
+            star.disableBody(true, true);
+
+            score += 1;
+            scoreText.setText('score: ' + score);
+        }
+
+        function hitBomb(player, bomb) {
+            this.physics.pause();
+
+            player.setTint(0xff0000);
+
+            player.anims.play('turn');
+
+            gameOver = true;
+        }
+
+        function hitPlayer(player, laser) {
+            health -= 0.5;
+            healthText.setText('health:' + health);
+
+        }
+
+        function laserAppear() {
+            laser.setAlpha(1);
+
+            this.time.addEvent({ delay: 300, callback: laserDisappear, callbackScope: this });
+        }
+
+        function laserDisappear() {
+            laser.setAlpha(0);
+            this.time.addEvent({ delay: 10000, callback: laserAppear, callbackScope: this });
+
+
+        }
+        //function updateCounter(laserCoolDown) {
+        //if (laserCoolDown) {
+        //laserCoolDown = false
+        //}
+        //else if (!laserCoolDown) {
+        //laserCoolDown = true
+        //}
+        //}
+    </script>
+
+</body>
+
+</html>
