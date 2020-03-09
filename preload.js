@@ -1,4 +1,4 @@
-class scene1 extends Phaser.Scene{
+class preload extends Phaser.Scene{
 	
 	constructor() {
 		super("bootGame");
@@ -9,21 +9,26 @@ class scene1 extends Phaser.Scene{
 	    this.load.spritesheet('missile', 'assets/missile.png', {frameWidth: 150, frameHeight: 30});
 	    this.load.image('bullet', 'assets/bullet.png');
 	    this.load.spritesheet('fire', 'assets/effects/fire.png', {frameWidth: 100, frameHeight: 100});
+	    this.load.spritesheet('weaponHit', 'assets/effects/weaponHit.png', {frameWidth: 100, frameHeight: 100});
+	    this.load.spritesheet('fireball', 'assets/effects/fireball.png', {frameWidth: 68, frameHeight: 9});
 	    this.load.spritesheet('missileExplosion', 'assets/effects/missileExplosion.png', {frameWidth: 100, frameHeight: 100});
-	    this.load.image('mech', 'assets/bigRobo.png');
 	    this.load.image('enemyMech1', 'assets/enemyMech1.png');
 	    this.load.spritesheet('minigun', 'assets/minigun.png', {frameWidth: 50, frameHeight: 51});
 	    
-	    this.load.image('shadow', 'assets/silhouette.png');
+	    this.load.spritesheet('missileLauncher', 'assets/missileLauncher.png', {frameWidth: 31, frameHeight: 32});
+	    
+	    this.load.image('shadow', 'assets/shadow.png');
 	    this.load.spritesheet('player', 'assets/playerSprite.png', { frameWidth: 34, frameHeight: 49 });
 	    this.load.spritesheet('playerMech1', 'assets/playerMech1.png', { frameWidth: 130, frameHeight: 130 });
 	    //
-	    this.load.spritesheet('rocketCounter', 'assets/UI/rocketCounter.png', { frameWidth: 32, frameHeight: 32 });
+	    this.load.spritesheet('rocketCounter', 'assets/UI/rocketUI.png', { frameWidth: 32, frameHeight: 32 });
 	    this.load.spritesheet('bulletCounter', 'assets/UI/bulletCounter.png', { frameWidth: 32, frameHeight: 32 });
 	    this.load.spritesheet('coolantActive', 'assets/UI/coolantActive.png', { frameWidth: 32, frameHeight: 32 });
 	    this.load.spritesheet('repairActive', 'assets/UI/repairActive.png', { frameWidth: 32, frameHeight: 32 });
 	    this.load.spritesheet('swordActive', 'assets/UI/swordActive.png', { frameWidth: 32, frameHeight: 32 });
 	    this.load.spritesheet('moduleUI', 'assets/UI/set22.png', { frameWidth: 22, frameHeight: 22 });
+	    this.load.spritesheet('hpUI', 'assets/hpBar.png', {frameWidth: 32, frameHeight: 4});
+	    this.load.image('TITLE', 'assets/RUSTHULK.png');
 	    this.load.image('bg1', 'assets/newParallax/bg1.png');
 	    this.load.image('bg2', 'assets/newParallax/bg2.png');
 	    this.load.image('bg3', 'assets/newParallax/bg3.png');
@@ -53,7 +58,14 @@ class scene1 extends Phaser.Scene{
         frameRate: 60,
         repeat: 0
     });
-    	this.scene.start("playGame");
+    
+		this.anims.create({
+        key: 'weaponHitAnim',
+        frames: this.anims.generateFrameNumbers('weaponHit', { start: 0, end: 29 }),
+        frameRate: 120,
+        repeat: 0
+    });
+    	this.scene.start("titleScreen");
 	}
 }
 

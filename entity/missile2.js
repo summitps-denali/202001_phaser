@@ -1,12 +1,12 @@
-class Missile extends Phaser.GameObjects.Sprite{
+class Missile2 extends Phaser.GameObjects.Sprite{
   constructor(scene){
 	var speed = 1;
 	var direction = 0;
 	var xSpeed = 0;
 	var ySpeed = 0;
-    var x = missileLauncher.x;
-    var y = missileLauncher.y;
-	var rng = Phaser.Math.Between(-25, 25);
+    var x = missileLauncher2.x;
+    var y = missileLauncher2.y;
+	var rng = Phaser.Math.Between(-100, 100);
 	
 	super(scene, x, y, "missile");
     scene.add.existing(this);

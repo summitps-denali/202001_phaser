@@ -5,7 +5,6 @@ class scene2 extends Phaser.Scene{
 
   create(){
 	//parallax
-	
 	this.bg1 = this.add.tileSprite(0, 0, game.config.width, 800, "bg1");
 	this.bg1.setOrigin(0, 0);
 	this.bg1.setScrollFactor(0);
@@ -31,6 +30,12 @@ class scene2 extends Phaser.Scene{
 	this.bg6.setScrollFactor(0);
 	this.bg6.setScale(3, 3);
 	
+	this.bg1.depth = -100
+	this.bg2.depth = -99
+	this.bg3.depth = -98
+	this.bg4.depth = -97
+	this.bg5.depth = -96
+	this.bg6.depth = -95
 	//still
 	this.bgbg = this.add.tileSprite(0, 0, 300, 800, "bg1");
 	this.bgbg.setOrigin(0, 0);
@@ -51,10 +56,34 @@ class scene2 extends Phaser.Scene{
 	this.bgbg6.setOrigin(0, 0);
 	this.bgbg6.setScale(3, 3);
 	
-	this.projectiles = this.add.group();
+	this.bullets = this.add.group();
+	this.missiles = this.add.group();
+	this.enemyMissiles = this.add.group();
 	
+	missileLauncher = this.physics.add.sprite(400, 260, 'missileLauncher');
+	missileLauncher.setOrigin(0.5, 0.5).setScale(5, 5).setFrame(0).body.allowGravity = false;
+	missileLauncher.reloading = false;
 	var shadow = this.add.image(300, 800, 'shadow');
 	shadow.setOrigin(0.5, 1).setScale(5, 5);
+	
+	//bullets
+	bulletCountUI = this.add.sprite(400, 380, 'bulletCounter');
+	bulletCountUI.setFrame(50).setScale(2, 2).setOrigin(0, 1).setAlpha(0);
+	
+	//rockets
+	ammoCountUI = this.add.sprite(330, 280, 'rocketCounter');
+	ammoCountUI.setFrame(23).setScale(2, 2).setOrigin(0, 1).setAlpha(0);
+	
+	//coolant
+	coolantUI = this.add.sprite(256, 900, 'coolantActive');
+	coolantUI.setScrollFactor(0).setFrame(0).setScale(4, 4).setOrigin(0, 1);
+	//repair
+	repairUI = this.add.sprite(384, 900, 'repairActive');
+	repairUI.setScrollFactor(0).setFrame(0).setScale(4, 4).setOrigin(0, 1);
+	//sword
+	swordUI = this.add.sprite(512, 900, 'swordActive');
+	swordUI.setScrollFactor(0).setFrame(0).setScale(4, 4).setOrigin(0, 1);
+	
 	
 		// The player and settings
 	player = this.physics.add.sprite(265, 300, 'player');
@@ -85,37 +114,21 @@ class scene2 extends Phaser.Scene{
 	platforms.create(180, 550, 'box').setScale(128, 128).setOrigin(0, 1).setAlpha(0).refreshBody();
 	platforms.create(400, 550, 'box').setScale(128, 128).setOrigin(0, 1).setAlpha(0).refreshBody();
 	
+	//mechPartBoxes1 = this.physics.add.sprite(400, 400, 'box');
+	//mechPartBoxes1.setOrigin(0, 1).setScale(100, 70).setAlpha(0);
+	//mechPartBoxes1.body.allowGravity = false;
 	
-	mechPartBoxes1 = this.physics.add.sprite(400, 400, 'box');
-	mechPartBoxes1.setOrigin(0, 1).setScale(100, 70).setAlpha(0);
-	mechPartBoxes1.body.allowGravity = false;
-	
-	
-	mechPartBoxes2 = this.physics.add.sprite(300, 300, 'box');
-	mechPartBoxes2.setOrigin(0, 1).setScale(100, 128).setAlpha(0);
-	mechPartBoxes2.body.allowGravity = false;
-	
-	
-	mechPartBoxes3 = this.physics.add.sprite(300, 300, 'box');
-	mechPartBoxes3.setOrigin(1, 1).setScale(128, 128).setAlpha(0);
-	mechPartBoxes3.body.allowGravity = false;
-	
-	
-	mechPartBoxes4 = this.physics.add.sprite(310, 450, 'box');
-	mechPartBoxes4.setOrigin(1, 1).setScale(100, 100).setAlpha(0);
-	mechPartBoxes4.body.allowGravity = false;
-	
-	
-	mechPartBoxes5 = this.physics.add.sprite(310, 500, 'box');
-	mechPartBoxes5.setOrigin(0, 1).setScale(70, 128).setAlpha(0);
-	mechPartBoxes5.body.allowGravity = false;
+    boxes = this.physics.add.staticGroup();
+	mechPartBoxes1 = boxes.create(400, 400, 'box').setScale(100, 70).setOrigin(0, 1).setAlpha(0).refreshBody(); //top
+	mechPartBoxes2 = boxes.create(300, 300, 'box').setScale(100, 128).setOrigin(0, 1).setAlpha(0).refreshBody();
+	mechPartBoxes3 = boxes.create(300, 300, 'box').setScale(128, 128).setOrigin(1, 1).setAlpha(0).refreshBody();
+	mechPartBoxes4 = boxes.create(310, 450, 'box').setScale(100, 100).setOrigin(1, 1).setAlpha(0).refreshBody();
+	mechPartBoxes5 = boxes.create(310, 500, 'box').setScale(70, 128).setOrigin(0, 1).setAlpha(0).refreshBody();
 	
 	//mech parts
-	playerMech1 = this.physics.add.sprite(300, 800, 'playerMech1');
+	playerMech1 = this.add.image(300, 800, 'playerMech1');
 	playerMech1.setOrigin(0.5, 1).setScale(5, 5);
-	playerMech1.setFrame(0).body.allowGravity = false;
 	//legs
-	
 	
 	playerMech2 = this.add.image(300, 800, 'playerMech1');
 	playerMech2.setOrigin(0.5, 1).setScale(5, 5);
@@ -131,20 +144,33 @@ class scene2 extends Phaser.Scene{
 	playerMech7.setOrigin(0.5, 1).setScale(5, 5);
 	playerMech7.setFrame(6);
 	
+	
+	
 	playerMech3 = this.add.image(300, 800, 'playerMech1');
 	playerMech3.setOrigin(0.5, 1).setScale(5, 5);
 	playerMech3.setFrame(2);
 	//right missile launcher
 	
+	
+	
+	
 	playerMech4 = this.add.image(300, 800, 'playerMech1');
 	playerMech4.setOrigin(0.5, 1).setScale(5, 5);
 	playerMech4.setFrame(3);
 	//left missile launcher
+
+	missileLauncher2 = this.physics.add.sprite(150, 260, 'missileLauncher');
+	missileLauncher2.setOrigin(0.5, 0.5).setScale(5, 5).setFrame(0).body.allowGravity = false;
 	
 	playerMech5 = this.add.image(300, 800, 'playerMech1');
 	playerMech5.setOrigin(0.5, 1).setScale(5, 5);
 	playerMech5.setFrame(4);
+	
 	//back
+	
+	hpUI4 = this.add.sprite(230, 430, "hpUI");
+	hpUI4.setFrame(0).setScale(2, 2).setOrigin(0, 1).setAlpha(1);
+	hp4 = 30;
 	
 	playerMech6 = this.add.image(300, 800, 'playerMech1');
 	playerMech6.setOrigin(0.5, 1).setScale(5, 5);
@@ -152,6 +178,35 @@ class scene2 extends Phaser.Scene{
 	//middle
 	
 	
+	hpUI5 = this.add.sprite(320, 515, "hpUI");
+	hpUI5.setFrame(0).setScale(2, 2).setOrigin(0, 1).setAlpha(1);
+	hp5 = 30;
+	
+	hpUI = this.add.sprite(400, 430, "hpUI");
+	hpUI.setFrame(0).setScale(2, 2).setOrigin(0, 1).setAlpha(1);
+	hp = 30;
+	//cockpit
+	
+	hpUI2 = this.add.sprite(320, 335, "hpUI");
+	hpUI2.setFrame(0).setScale(2, 2).setOrigin(0, 1).setAlpha(1);
+	hp2 = 30;
+	
+	
+	//rockets
+	ammoCountUI2 = this.add.sprite(230, 280, 'rocketCounter');
+	ammoCountUI2.setFrame(23).setScale(2, 2).setOrigin(0, 1).setAlpha(0);
+	
+	hpUI3 = this.add.sprite(230, 335, "hpUI");
+	hpUI3.setFrame(0).setScale(2, 2).setOrigin(0, 1).setAlpha(1);
+	hp3 = 30;
+	
+	
+    
+    //this.physics.add.collider(this.projectiles, platforms, this.soundTest, null, this);
+	//ground
+    //platforms.create(600, 864, 'ground').setScale(20, 6).setAlpha(0).refreshBody();
+    
+    
 	enemyMech = this.physics.add.staticImage(2000, 800, 'enemyMech1');
 	enemyMech.setOrigin(0.5, 1).setScale(7, 7).refreshBody;
 	enemyMech.flipX = true;
@@ -159,25 +214,76 @@ class scene2 extends Phaser.Scene{
 	enemyMech.body.setSize(200, 200);
 	enemyMech.body.setOffset(-50, -400);
 	
-	enemyMechHitbox = this.physics.add.staticGroup();
-    
-    //this.physics.add.collider(this.projectiles, platforms, this.soundTest, null, this);
-	//ground
-    //platforms.create(600, 864, 'ground').setScale(20, 6).setAlpha(0).refreshBody();
 
-	//mech platforms
-	enemyMechHitbox.create(2000, 500, 'box').setScale(64, 64).setAlpha(1).refreshBody(); //top
+	enemyMechHPUI = this.add.sprite(1960, 500, 'hpUI');
+	enemyMechHPUI.setFrame(0).setScale(2, 2).setOrigin(0, 1).setAlpha(1);
+	enemyMechHP = 30;
+	//
 	
-    this.physics.add.collider(this.projectiles, enemyMech, this.explosion, null, this);
-    this.physics.add.collider(this.projectiles, enemyMechHitbox, this.explosion, null, this);
+	enemyMechHPUI2 = this.add.sprite(1800, 580, 'hpUI');
+	enemyMechHPUI2.setFrame(0).setScale(2, 2).setOrigin(0, 1).setAlpha(1);
+	enemyMechHP2 = 30;
+	//
+	
+	enemyMechHPUI3 = this.add.sprite(1900, 700, 'hpUI');
+	enemyMechHPUI3.setFrame(0).setScale(2, 2).setOrigin(0, 1).setAlpha(1);
+	enemyMechHP3 = 30;
+	//rleg
+	
+	enemyMechHPUI4 = this.add.sprite(1850, 440, 'hpUI');
+	enemyMechHPUI4.setFrame(0).setScale(2, 2).setOrigin(0, 1).setAlpha(1);
+	enemyMechHP4 = 30;
+	//rshoulder
+	
+	
+	enemyMechHitbox = this.physics.add.staticGroup();
+	//right cannon
+	enemyMechHitbox.create(1750, 600, 'box').setScale(64, 64).setOrigin(0, 1).setAlpha(0).refreshBody(); //top
+	enemyMechHitbox.create(1800, 580, 'box').setScale(64, 64).setOrigin(0, 1).setAlpha(0).refreshBody(); //top
+	enemyMechHitbox.create(1850, 560, 'box').setScale(64, 64).setOrigin(0, 1).setAlpha(0).refreshBody(); //top
+	
+	//right shoulder
+	
+	enemyMechHitbox2 = this.physics.add.staticGroup();
+	enemyMechHitbox2.create(1835, 440, 'box').setScale(64, 64).setOrigin(0, 1).setAlpha(0).refreshBody(); //top
+	
+	
+	//left cannon
+	enemyMechHitbox3 = this.physics.add.staticGroup();
+	enemyMechHitbox3.create(2500, 600, 'box').setScale(64, 64).setOrigin(0, 1).setAlpha(0).refreshBody(); //top
+	enemyMechHitbox3.create(2500, 580, 'box').setScale(64, 64).setOrigin(0, 1).setAlpha(0).refreshBody(); //top
+	enemyMechHitbox3.create(2500, 560, 'box').setScale(64, 64).setOrigin(0, 1).setAlpha(0).refreshBody(); //top
+	
+	
+	//right leg
+	enemyMechHitbox4 = this.physics.add.staticGroup();
+	enemyMechHitbox4.create(1880, 700, 'box').setScale(64, 128).setOrigin(0, 1).setAlpha(0).refreshBody(); //top
+	enemyMechHitbox4.create(1890, 760, 'box').setScale(64, 64).setOrigin(0, 1).setAlpha(0).refreshBody(); //top
+	enemyMechHitbox4.create(1800, 800, 'box').setScale(128, 64).setOrigin(0, 1).setAlpha(0).refreshBody(); //top
+	
+    this.physics.add.collider(this.bullets, enemyMech, this.explosion1, null, this);
+    this.physics.add.collider(this.bullets, enemyMechHitbox, this.explosion2, null, this);
+    this.physics.add.collider(this.bullets, enemyMechHitbox2, this.explosion3, null, this);
+    this.physics.add.collider(this.bullets, enemyMechHitbox3, this.explosion5, null, this);
+    this.physics.add.collider(this.bullets, enemyMechHitbox4, this.explosion4, null, this);
+    
+    
+    this.physics.add.collider(this.missiles, enemyMech, this.misExplosion1, null, this);
+    this.physics.add.collider(this.missiles, enemyMechHitbox, this.misExplosion2, null, this);
+    this.physics.add.collider(this.missiles, enemyMechHitbox2, this.misExplosion3, null, this);
+    this.physics.add.collider(this.missiles, enemyMechHitbox3, this.misExplosion5, null, this);
+    this.physics.add.collider(this.missiles, enemyMechHitbox4, this.misExplosion4, null, this);
+    
+    this.physics.add.collider(this.enemyMissiles, boxes, this.misExplosion1, null, this);
+    
     
     
 	
 	//camera
-    cam1 = this.cameras.add(0, 0, 750, 325);;
-	cam1.startFollow(player, true); //necessary
+    cam1 = this.cameras.add(0, 0, 550, 800);;
+	cam1.startFollow(playerMech1, true); //necessary
 	cam1.setZoom(1);
-    cam1.setBounds(0, 0, game.config.width * 3, 800);
+    cam1.setBounds(75, 110, 550, 600);
     
 
 	this.physics.add.collider(player, platforms);
@@ -198,16 +304,18 @@ class scene2 extends Phaser.Scene{
 	this.physics.add.overlap(player2, mechPartBoxes5, this.goGhost5, null, this);
     
     
-    var cam2 = this.cameras.add(0, 325, 750, 325);
-	cam2.startFollow(player2, true); //necessary
-	cam2.setZoom(1);
-    cam2.setBounds(0, 0, game.config.width * 3, 800);
+ //   var cam2 = this.cameras.add(0, 325, 750, 325);
+	// cam2.startFollow(player2, true); //necessary
+	// cam2.setZoom(1);
+ //   cam2.setBounds(0, 0, 500, 600);
    
     
     //  Input Events
     cursors = this.input.keyboard.createCursorKeys();
 	spacebar = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 	Zkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+	Ekey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
+	Pkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.P);
 	Rkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
 	
 	//player 2 controls
@@ -216,21 +324,6 @@ class scene2 extends Phaser.Scene{
 	Skey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S);
 	Dkey = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
 	
-	//bullets
-	bulletCountUI = this.add.sprite(400, 325, 'bulletCounter')
-	bulletCountUI.setFrame(50).setScale(2, 2).setOrigin(0, 1).setAlpha(0);
-	//rockets
-	ammoCountUI = this.add.sprite(128, 900, 'rocketCounter')
-	ammoCountUI.setScrollFactor(0).setFrame(6).setScale(4, 4).setOrigin(0, 1);
-	//coolant
-	coolantUI = this.add.sprite(256, 900, 'coolantActive')
-	coolantUI.setScrollFactor(0).setFrame(0).setScale(4, 4).setOrigin(0, 1);
-	//repair
-	repairUI = this.add.sprite(384, 900, 'repairActive')
-	repairUI.setScrollFactor(0).setFrame(0).setScale(4, 4).setOrigin(0, 1);
-	//sword
-	swordUI = this.add.sprite(512, 900, 'swordActive')
-	swordUI.setScrollFactor(0).setFrame(0).setScale(4, 4).setOrigin(0, 1);
 	//mech modules
 	//mechHead = this.add.sprite(88, 0, 'moduleUI')
 	//mechHead.setScrollFactor(0).setFrame(6).setScale(4, 4).setOrigin(0, 0);
@@ -239,6 +332,26 @@ class scene2 extends Phaser.Scene{
     this.anims.create({
         key: 'moveAnim',
         frames: this.anims.generateFrameNumbers('player', { start: 0, end: 5 }),
+        frameRate: 10,
+        repeat: 0
+    });
+    
+    
+    this.anims.create({
+        key: 'rocketFireUI',
+        frames: this.anims.generateFrameNumbers('rocketCounter', { start: 23, end: 24 }),
+        frameRate: 10,
+        repeat: 0
+    });
+    this.anims.create({
+        key: 'rocketFireUIReloading',
+        frames: this.anims.generateFrameNumbers('rocketCounter', { start: 2, end: 22 }),
+        frameRate: 10,
+        repeat: 0
+    });
+    this.anims.create({
+        key: 'rocketFireUIOutOfAmmo',
+        frames: this.anims.generateFrameNumbers('rocketCounter', { start: 0, end: 1 }),
         frameRate: 10,
         repeat: 0
     });
@@ -257,12 +370,12 @@ class scene2 extends Phaser.Scene{
 	reticle = this.physics.add.sprite(2000, 455, 'crosshair');
 	
 	
-	cam3 = this.cameras.add(750, 0, 750, 650);
+	cam3 = this.cameras.add(550, 0, 950, 650);
 	cam3.startFollow(reticle, true); //necessary
 	//cam2.setZoom(1);
-    //cam3.setBounds(1500, 0, 1000, 900); //1500
-    cam3.setBounds(0, 0, 3000, 800); 
-	
+    cam3.setBounds(1000, 0, 2000, 800); //1500
+    //cam3.setBounds(0, 0, 3000, 800); 
+	this.enemyAILoop();
 	reticle.setScale(4, 4); 
 	//reticle.setScrollFactor(0)
 	//setCollideWorldBounds(true).
@@ -273,23 +386,24 @@ class scene2 extends Phaser.Scene{
         if (this.input.mouse.locked)
         { //store position in variable
 			//pointerPosX += pointer.movementX;
+			if (player.visitedRoom == 2 || player2.visitedRoom == 2) {
             reticle.x += pointer.movementX;
             reticle.y += pointer.movementY;
-
+}
         }
     }, this);
 
   }//end
 
 update(){
-	
+	var collapsible;
+	if (collapsible == null){
 	this.bg1.tilePositionX = cam3.scrollX * .1;
 	this.bg2.tilePositionX = cam3.scrollX * .11;
 	this.bg3.tilePositionX = cam3.scrollX * .12;
 	this.bg4.tilePositionX = cam3.scrollX * .13;
 	this.bg5.tilePositionX = cam3.scrollX * .14;
 	this.bg6.tilePositionX = cam3.scrollX * .15;
-	
 	this.bg1.tilePositionY = cam3.scrollY * .1;
 	this.bg2.tilePositionY = cam3.scrollY * .11;
 	this.bg3.tilePositionY = cam3.scrollY * .12;
@@ -297,8 +411,25 @@ update(){
 	this.bg5.tilePositionY = cam3.scrollY * .14;
 	this.bg6.tilePositionY = cam3.scrollY * .15;
 	
+	}
 	
+	hpUI.setFrame((hp - 30) * -1);
+	hpUI2.setFrame((hp2 - 30) * -1);
+	// hpUI3.setFrame((hp3 - 30) * -1)
+	// hpUI4.setFrame((hp4 - 30) * -1)
+	// hpUI5.setFrame((hp5 - 30) * -1)
+	// hpUI6.setFrame((hp6 - 30) * -1)
+	
+	enemyMechHPUI.setFrame((enemyMechHP - 30) * -1);
+	enemyMechHPUI2.setFrame((enemyMechHP2 - 30) * -1);
+	enemyMechHPUI3.setFrame((enemyMechHP4 - 30) * -1);
+	enemyMechHPUI4.setFrame((enemyMechHP3 - 30) * -1);
+
 	minigun.rotation = Phaser.Math.Angle.Between(minigun.x, minigun.y, reticle.x, reticle.y);
+	
+	missileLauncher.rotation = Phaser.Math.Angle.Between(missileLauncher.x, missileLauncher.y, reticle.x, reticle.y);
+	
+	missileLauncher2.rotation = Phaser.Math.Angle.Between(missileLauncher2.x, missileLauncher2.y, reticle.x, reticle.y);
 	
 	if(player.visitedRoom == 2 || player2.visitedRoom == 2) {
 		playerMech2.setAlpha(.2);
@@ -310,16 +441,20 @@ update(){
 	}
 	if(player.visitedRoom == 3 || player2.visitedRoom == 3) {
 		playerMech3.setAlpha(.2);
+		ammoCountUI.setAlpha(0.7);
 	}
 	else {
 		playerMech3.setAlpha(1);
+		ammoCountUI.setAlpha(0);
 	}
 	
 	if(player.visitedRoom == 4 || player2.visitedRoom == 4) {
 		playerMech4.setAlpha(.2);
+		ammoCountUI2.setAlpha(0.7);
 	}
 	else {
 		playerMech4.setAlpha(1);
+		ammoCountUI2.setAlpha(0);
 	}
 	
 	if(player.visitedRoom == 5 || player2.visitedRoom == 5) {
@@ -336,44 +471,128 @@ update(){
 	else {
 		playerMech6.setAlpha(1);
 	}
-
+	if (loadedMissiles < 1 && missileLauncher.reloading == false) {
+		ammoCountUI.anims.play('rocketFireUIOutOfAmmo', true);
+	}
+	
+	if (loadedMissiles2 < 1) {
+		ammoCountUI2.anims.play('rocketFireUIOutOfAmmo', true);
+	}
+	if(loadedMissiles > 0 && missileLauncher.reloading == false){
+		
+	}
+	//bullets
+	bulletCountUI.setFrame(loadedBullets);
 	//move reticle based on camera scrolling
 	//reticle.x = cam1.scrollX;
 	//reset reticle to previous position
     //reticle.x += pointerPosX;
+	missileLauncher.setFrame(loadedMissiles);
 	
-	ammoCountUI.setFrame(loadedMissiles);
-	if (spacebar.isDown && firingMissiles == false && loadedMissiles > 0){
-		//fire loaded missiles
-		firingMissiles = true;
-		loadedMissiles -= 1;
-		this.shootBeam();
-    }
-	else if (Phaser.Input.Keyboard.JustDown(spacebar) && loadedMissiles == 0){
-		var emptySound = this.sound.add('emptyClip');
-    	emptySound.play();
-	}
-	if (Phaser.Input.Keyboard.JustDown(Rkey)){
-		this.reloadMissiles();
-	}
-	//now bullets
-	bulletCountUI.setFrame(loadedBullets);
-	if (Zkey.isDown && firingBullets == false && loadedBullets > 0){
-		//fire loaded missiles
+	
+	missileLauncher2.setFrame(loadedMissiles2);
+	
+	
+	// else if (Phaser.Input.Keyboard.JustDown(spacebar) && loadedMissiles == 0){
+	// 	var emptySound = this.sound.add('emptyClip');
+ //   	emptySound.play();
+	// }
+	
+	
+	if (cursors.down.isDown ){ //player
+		if (player.visitedRoom == 2 && firingBullets == false && loadedBullets > 0){
+		//fire loaded bullets
 		firingBullets = true;
 		loadedBullets -= 1;
 		
     	minigun.anims.play('minigunFire', true);
 		this.shootBullet();
+		}
+		if (player.visitedRoom == 3 && cursors.up.isDown && loadedMissiles < 4){
+			
+		this.reloadMissiles();
+		}
+		else if (player.visitedRoom == 4 && cursors.up.isDown && loadedMissiles2 < 4){
+		this.reloadMissiles2();
+		}
+		else if (player.visitedRoom == 3 && firingMissiles == false && loadedMissiles > 0){
+		//fire loaded missiles
+		missileLauncher.reloading = false;
+		firingMissiles = true;
+		loadedMissiles -= 1;
+		
+		ammoCountUI.anims.play('rocketFireUI', true);
+		this.shootMissiles();
+    	}
+		else if (player.visitedRoom == 4 && firingMissiles2 == false && loadedMissiles2 > 0){
+		//fire loaded missiles
+		missileLauncher.reloading = false;
+		firingMissiles2 = true;
+		loadedMissiles2 -= 1;
+		
+		ammoCountUI2.anims.play('rocketFireUI', true);
+		this.shootMissiles2();
+    	}
     }
-	else if (Phaser.Input.Keyboard.JustDown(Zkey) && loadedBullets == 0){
-		var emptySound = this.sound.add('emptyClip');
-    	emptySound.play();
-	}
+    
+	if (Skey.isDown){
+		if (player2.visitedRoom == 2 && firingBullets == false && loadedBullets > 0){
+		//fire loaded bullets
+		firingBullets = true;
+		loadedBullets -= 1;
+		
+    	minigun.anims.play('minigunFire', true);
+		this.shootBullet();
+		}
+		if (player2.visitedRoom == 3 && Wkey.isDown && loadedMissiles < 4){
+			
+		this.reloadMissiles();
+		}
+		else if (player2.visitedRoom == 4 && Wkey.isDown && loadedMissiles2 < 4){
+		this.reloadMissiles2();
+		}
+		else if (player2.visitedRoom == 3 && firingMissiles == false && loadedMissiles > 0){
+		//fire loaded missiles
+		missileLauncher.reloading = false;
+		firingMissiles = true;
+		loadedMissiles -= 1;
+		
+		ammoCountUI.anims.play('rocketFireUI', true);
+		this.shootMissiles();
+		}
+		else if (player2.visitedRoom == 4 && firingMissiles2 == false && loadedMissiles2 > 0){
+		//fire loaded missiles
+		missileLauncher2.reloading = false;
+		firingMissiles2 = true;
+		loadedMissiles2 -= 1;
+		
+		ammoCountUI2.anims.play('rocketFireUI', true);
+		this.shootMissiles2();
+    	}
+    	
+    }
+    
+    
+    if (cursors.up.isDown && player.body.touching.down){
+        player.setVelocityY(-350);
+    }
+    
+    
+    if (Wkey.isDown && player2.body.touching.down)
+    {
+        player2.setVelocityY(-350);
+    }
+    
+    
+
+//	else if (Phaser.Input.Keyboard.JustDown(Zkey) && loadedBullets == 0){
+	// 	var emptySound = this.sound.add('emptyClip');
+ //   	emptySound.play();
+	// }
 
    // 4.2 update all the beams
-    for(var i = 0; i < this.projectiles.getChildren().length; i++){
-      var beam = this.projectiles.getChildren()[i];
+    for(var i = 0; i < this.bullets.getChildren().length; i++){
+      var beam = this.bullets.getChildren()[i];
       beam.update();
     }
 	
@@ -392,10 +611,6 @@ update(){
 		player.setFrame(0);
     }
 	
-    if (cursors.up.isDown && player.body.touching.down)
-    {
-        player.setVelocityY(-350);
-    }
 //player 2
 	if (Akey.isDown) {
     	player2.setVelocityX(-150);
@@ -412,27 +627,57 @@ update(){
 		player2.setFrame(0);
     }
 	
-    if (Wkey.isDown && player2.body.touching.down)
-    {
-        player2.setVelocityY(-350);
-    }
-
 }
-// 2.2 create the shootBeam function
-  	shootBeam(){
+// 2.2 create the shootMissiles function
+  	shootMissiles(){
     // fire missile
     var beam = new Missile(this);
 	var missileSound = this.sound.add('missileFire');
     missileSound.play();
 	this.time.addEvent({ delay: 200, callback: this.resetMissileCoolDown, callbackScope: this, repeat: 0 });
   	}
+  	shootMissiles2(){
+    // fire missile
+    var beam2 = new Missile2(this);
+	var missileSound = this.sound.add('missileFire');
+    missileSound.play();
+	this.time.addEvent({ delay: 200, callback: this.resetMissileCoolDown2, callbackScope: this, repeat: 0 });
+  	}
 	resetMissileCoolDown(){
 		firingMissiles = false;
+		ammoCountUI.setFrame(23);
+	}
+	resetMissileCoolDown2(){
+		firingMissiles2 = false;
+		ammoCountUI2.setFrame(23);
 	}
 	reloadMissiles(){
-		if(loadedMissiles < 6){
-		loadedMissiles += 1;	
-		}
+    	if (reloadProgress + 2 < 22){
+    	missileLauncher.reloading = true;
+    	ammoCountUI.setFrame(Phaser.Math.RoundTo(reloadProgress + 2, 0));
+    	reloadProgress += 0.2;
+    	}
+    	else {
+    		reloadProgress = 0;
+    		loadedMissiles +=1;
+    		missileLauncher.reloading = false;
+    	}
+	}
+	
+	reloadMissiles2(){
+    	if (reloadProgress2 + 2 < 22){
+    	missileLauncher2.reloading = true;
+    	ammoCountUI2.setFrame(Phaser.Math.RoundTo(reloadProgress2 + 2, 0));
+    	reloadProgress2 += 0.2;
+    	}
+    	else {
+    		reloadProgress2 = 0;
+    		loadedMissiles2 +=1;
+    		missileLauncher2.reloading = false;
+    	}
+	}
+	
+	reloadBullets(){
 		loadedBullets = 50;
 		//var reloadSound = this.sound.add('gunCock');
     	//reloadSound.play();
@@ -447,29 +692,93 @@ update(){
 	resetBulletCoolDown(){
 		firingBullets = false;
 	}
-	explosion(projectile, thing){
+	explosion1(projectile, thing){
+			enemyMechHP -= 1;
+			this.boom (projectile, thing);
+	}
+	
+	
+	explosion2(projectile, thing){
+			enemyMechHP2 -= 1;
+			this.boom (projectile, thing);
+	}
+	
+	
+	explosion3(projectile, thing){
+			enemyMechHP3 -= 1;
+			this.boom (projectile, thing);
+	}
+	
+	
+	explosion4(projectile, thing){
+			enemyMechHP4 -= 1;
+			this.boom (projectile, thing);
+	}
+	
+	misExplosion1(projectile, thing){
+			enemyMechHP -= 10;
+			this.boom (projectile, thing, "missile");
+	}
+	
+	
+	misExplosion2(projectile, thing){
+			enemyMechHP2 -= 10;
+			this.boom (projectile, thing, "missile");
+	}
+	
+	
+	misExplosion3(projectile, thing){
+			enemyMechHP3 -= 10;
+			this.boom (projectile, thing, "missile");
+	}
+	
+	
+	misExplosion4(projectile, thing){
+			enemyMechHP4 -= 10;
+			this.boom (projectile, thing, "missile");
+	}
+
+enemyAILoop(){
+	
+		var fireball = new Fireball(this);
+	this.time.addEvent({ delay: 200, callback: this.enemyAILoop, callbackScope: this, repeat: 0 });
+}
+	boom (projectile, thing, type) {
+		
 		var rng = Phaser.Math.Between(-5, 5);
+		var rng2 = Phaser.Math.Between(0, 100);
 		var explosionSound = this.sound.add('explosion');
     	explosionSound.play();
-		var explosion = new Explosion(this);
-		explosion.x = projectile.x-100;
-		explosion.y = projectile.y;
-		//make angle semi-determined by projectile angle.
-		if (projectile.body.touching.down) {
-			explosion.angle = 0
-		}
-		else if (projectile.body.touching.right){
-			explosion.angle = -90
-		}
-		else if (projectile.body.touching.left){
-			explosion.angle = -90
-		}
-		else if (projectile.body.touching.up){
-			explosion.angle = 180
-		}
-		explosion.angle += rng;
-		explosion.setScale(1, 1);
+		//var explosion = new Explosion(this);
+		// explosion.x = projectile.x + rng2;
+		// explosion.y = projectile.y;
 		
+		var hit = new weaponHit(this);
+		
+		hit.x = projectile.x;
+		hit.y = projectile.y;
+		//make angle semi-determined by projectile angle.
+		// if (projectile.body.touching.down) {
+		// 	explosion.angle = 0
+		// }
+		// else if (projectile.body.touching.right){
+		// 	explosion.angle = -90
+		// }
+		// else if (projectile.body.touching.left){
+		// 	explosion.angle = -90
+		// }
+		// else if (projectile.body.touching.up){
+		// 	explosion.angle = 180
+		// }
+		// explosion.angle += rng;
+		if (type == "missile"){
+			// explosion.setScale(2, 2);	
+			hit.setScale(2, 2);	
+		}
+		else {
+		// explosion.setScale(1, 1);
+			hit.setScale(1, 1);	
+		}
 		projectile.destroy();
 	}
 	goGhost1(player, mechPartBoxes1){
