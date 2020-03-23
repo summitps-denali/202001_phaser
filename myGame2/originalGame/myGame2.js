@@ -208,7 +208,6 @@ game_state.main.prototype = {
         this.midBackground2.x -= this.cameraMovement / 4;
         this.frontBackground1.x -= this.cameraMovement / 2;
         this.frontBackground2.x -= this.cameraMovement / 2;
-        
         //lava
         this.lava1.x -= this.cameraMovement;
         this.lava2.x -= this.cameraMovement;
