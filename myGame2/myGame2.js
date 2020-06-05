@@ -1,7 +1,4 @@
-/*global Phaser*/
-
-var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
-var game_state = {}
+/*  global game game_state Phaser  */
 
 game_state.main = function() {};
 game_state.main.prototype = {
@@ -66,7 +63,6 @@ game_state.main.prototype = {
         object.kill();
     },
 
-}
-game.state.add('main', game_state.main);
-game.state.start('main');
+};
 
+game.state.add('main', game_state.main);
