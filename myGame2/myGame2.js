@@ -1,4 +1,4 @@
-/*global Phaser*/
+/*  global Phaser duckSound  */
 
 var game = new Phaser.Game(800, 600, Phaser.AUTO, '');
 var game_state = {}
@@ -80,6 +80,7 @@ game_state.main.prototype = {
         if (this.cursors.up.isDown &&
             this.player.body.touching.down){
             this.player.body.velocity.y = -350;
+            
         }
         //stars
         game.physics.arcade.collide(this.stars, this.platforms);
@@ -90,6 +91,7 @@ game_state.main.prototype = {
         star.kill();
         this.score += 1;
         this.scoreText.text = 'score: ' + this.score;
+        duckSound.play(1)
         }
         
     }
